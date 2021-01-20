@@ -117,8 +117,28 @@
         <p>
             <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode จากนั้นเขียน code ใน <code>&lt;form id="form"&gt;</code>
         </p>
-        <form id="form">
+        <form id="form" style="padding-top: 20px;">
             <!-- สร้างฟอร์มต่อจากนี้เลยยย -->
+            <select id="prename" name="prename">
+                <option>นาย</option>
+                <option>นางงสาว</option>
+            </select>
+            <label>ชื่อจริง : </label>
+            <input type="text" id="fname" name="fname">
+            <label>นามสุกล : </label>
+            <input type="text" id="lname" name="lname"><br>
+            <label>วันเกิด : </label>
+            <input type="date" id="dob" name="dob">
+            <label>อายุ : </label>
+            <input type="text" id="age" name="age"><br>
+            <label>ชั้นปี </label><br>
+            <input type="radio" id="year" name="year" value="1"> ปี 1</input>
+            <input type="radio" id="year" name="year" value="2"> ปี 2</input>
+            <input type="radio" id="year" name="year" value="3"> ปี 3</input>
+            <input type="radio" id="year" name="year" value="4"> ปี 4</input><br>
+            <input type="checkbox" id="subscribe" name="subscribe" value="subscribe"> Subscribe News</input><br>
+            <input type="checkbox" id="accept" name="accept" value="accept"> Accept the agreement</input><br>
+            <input type="submit" value="Submit">
         </form>
 
         <!-- ส่วนสำหรับแสดงข้อมูลจาก Form -->

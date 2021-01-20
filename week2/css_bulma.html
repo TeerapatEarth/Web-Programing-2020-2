@@ -48,6 +48,16 @@
         </p>
         <div id="ex3_1">
             <!-- ใส่ปุ่มต่อใน div นี้ -->
+            <button class="button is-primary">สีหลัก</button>
+            <button class="button is-link">ลิ้งค์</button>
+            <button class="button is-info">ข้อมูล</button>
+            <button class="button is-success">สำเร็จ</button>
+            <button class="button is-warning">คำเตือน</button>
+            <button class="button is-danger">อันตราย</button>
+            <button class="button is-white">ขาว</button>
+            <button class="button is-black">ดำ</button>
+            <button class="button is-light">สว่าง</button>
+            <button class="button is-dark">มืด</button>
         </div>
 
         <br>
@@ -72,7 +82,7 @@
         <p class="mb-3">
             <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode จากนั้นแก้ไข attribute class ของ tag <code>&lt;p id="ex3_2"&gt;</code>
         </p>
-        <p id="ex3_2">Lorem ipsum dolor sit amet,
+        <p id="ex3_2" class="has-text-info has-background-light is-size-4">Lorem ipsum dolor sit amet,
             consectetur adipisicing
             elit, sed
             do eiusmod tempor
@@ -102,7 +112,7 @@
         </p>
         <div class="has-background-danger-light p-3">
             <!-- แก้ไขปุ่มที่มีให้ได้เลย -->
-            <a id="ex3_3">ปุ่มนี้กดได้แต่ไม่มีไรขึ้นหรอก</a>
+            <a id="ex3_3" class="px-6 py-4 mt-6 ml-2 mb-5 button is-medium has-text-weight-bold button is-info">ปุ่มนี้กดได้แต่ไม่มีไรขึ้นหรอก</a>
         </div>
 
         <br>
@@ -122,6 +132,27 @@
         </p>
         <form id="form">
             <!-- ก้อปโค้ดข้างใน form จากหน้าเมื่อกี้มาเลย จากนั้น ปรับแต่งให้สวยงามด้วย Bulma CSS -->
+            <div class="select mb-3">
+                <select id="prename" name="prename">
+                    <option>นาย</option>
+                    <option>นางงสาว</option>
+                </select>
+            </div><br>
+            <label class="label has-text-weight-bold">ชื่อจริง : </label>
+            <input class="input" type="text" id="fname" name="fname">
+            <label class="label has-text-weight-bold">นามสุกล : </label>
+            <input class="input" type="text" id="lname" name="lname"><br>
+            <label class="label has-text-weight-bold">วันเกิด : </label>
+            <input class="input"type="date" id="dob" name="dob">
+            <label class="label has-text-weight-bold">อายุ : </label>
+            <input class="input mb-3" type="text" id="age" name="age">
+            <input type="radio" id="year" name="year" value="1"> ปี 1</input>
+            <input type="radio" id="year" name="year" value="2"> ปี 2</input>
+            <input type="radio" id="year" name="year" value="3"> ปี 3</input>
+            <input type="radio" id="year" name="year" value="4"> ปี 4</input><br>
+            <input class="mt-4" type="checkbox" id="subscribe" name="subscribe" value="subscribe"> Subscribe News</input><br>
+            <input class="my-4" type="checkbox" id="accept" name="accept" value="accept"> Accept the agreement</input><br>
+            <input class="button"type="submit" value="Submit">
         </form>
 
         <!-- ส่วนสำหรับแสดงข้อมูลจาก Form -->
@@ -143,7 +174,27 @@
         </p>
         <!-- สร้าง card ที่นี่ -->
         <div id="ex3_5">
-
+            <div class="card" style="width: 40%;">
+                <div class="card-image">
+                  <figure class="image is-4by3">
+                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-content">
+                      <p class="title is-4 is-size-3">รีวิววิชา Web <br>Programing</p>
+                    </div>
+                  </div>
+                  <div class="content">
+                    เรียนสนุกมากเลยครับไม่น่าเบื่อ ^^
+                  </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="#" class="card-footer-item">Favorite</a>
+                    <a href="#" class="card-footer-item">Share</a>
+                  </footer>
+              </div>
         </div>
 
         <!-- ข้อ 4 column bulma -->
@@ -161,7 +212,66 @@
                   4 of 5
                 </div>
                 <div class="column has-background-light has-text-black">
-                  Auto
+                    <b>Auto</b>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column has-background-link is-three-quarters">
+                    3 of 4
+                </div>
+                <div class="column has-background-light has-text-black">
+                    <b>Auto</b>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column has-background-primary is-one-quarter">
+                    1 of 4
+                </div>
+                <div class="column has-background-light has-text-black">
+                    <b>Auto</b>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column has-background-danger is-2">
+                    2
+                </div>
+                <div class="column has-background-warning is-2">
+                    2
+                </div>
+                <div class="column has-background-success is-2">
+                    2
+                </div>
+                <div class="column has-background-primary is-2">
+                    2
+                </div>
+                <div class="column has-background-info is-2">
+                    2
+                </div>
+                <div class="column has-background-link is-2">
+                    2
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column has-background-primary is-half">
+                    half
+                </div>
+                <div class="column has-background-link is-one-quarter">
+                    1 of 4
+                </div>
+                <div class="column has-background-warning is-one-quarter">
+                    1 of 4
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-8"></div>
+                <div class="column has-background-primary">
+                    4
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-4"></div>
+                <div class="column has-background-danger">
+                    8
                 </div>
             </div>
         </div>
