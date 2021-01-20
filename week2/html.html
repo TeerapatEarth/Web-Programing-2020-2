@@ -52,7 +52,44 @@
             <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode จากนั้นเขียนตารางด้วย HMTL ใน <code>&lt;div id="ex1"&gt;</code>
         </p>
         <div id="ex1">
-            <!-- ใส่โค้ดสร้างตารางใน div นี้ -->
+            <table>
+                <tr>
+                    <th colspan="5" class="headInovice" style="text-align: center; background-color: dodgerblue; color: white">Inovice</th>
+                </tr>
+                <tr>
+                    <td style="width: 150px; height: 150px;" rowspan="2"><img src="/assets/it-logo.png"></td>
+                    <td style="text-align: center;"><b>ID</b></td>
+                    <td style="text-align: center;">รหัสนักศึกษา</td>
+                    <td style="text-align: center;"><b>Date</b></td>
+                    <td style="text-align: center;">22/01/2021</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 10px;"><b>Name</b></td>
+                    <td colspan="2" style="padding: 10px;">ชื่อ - นามสุกล</td>
+                </tr>
+                <tr>
+                    <th colspan="5" class="headOrder" style="text-align: center;">Order</th>
+                </tr>
+                <tr>
+                    <td colspan="3" class="order">Monitor 24 inch</td>
+                    <td class="order">x1</td>
+                    <td class="order" id="order1">3900</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="order">Ram 4 GB</td>
+                    <td class="order">x2</td>
+                    <td class="order" id="order2">3200</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="order">Fan</td>
+                    <td class="order">x3</td>
+                    <td class="order" id="order3">120</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="order" style="text-align:right"><b>Total</b></td>
+                    <td class="order" style="background-color: yellow;">7220 ฿</td>
+                </tr>
+            </table>
         </div>
 
         <!-- ข้อ 2 Form-->
