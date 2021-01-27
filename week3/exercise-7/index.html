@@ -64,16 +64,17 @@
                 <td>ราคา</td>
                 <!-- PROBLEM 7.3 -->
                 <!-- <td>ลบ</td>  -->
+                <td>ลบ</td>
               </tr>
             </thead>
             <tbody></tbody>
             <!-- PROBLEM 7.4 -->
-            <!-- <tfoot>
+            <tfoot>
               <th></th>
-              <th id="total-amount"></th>
-              <th id="total-price"></th>
+              <th id="total-amount">0.00</th>
+              <th id="total-price">0.00</th>
               <th></th>
-            </tfoot>   -->
+            </tfoot>
           </table>
         </div>
       </div>
@@ -122,6 +123,12 @@
   </body>
 
   <script>
+    let count = 0
+    let totalPrice = 0
+    let water = false
+    let cola = false
+    let milk = false
+    let greentea = false
     // Setup Event Listener
     for (let el of document.getElementsByClassName('product')) {
       el.addEventListener('click', onSelectProduct)
@@ -131,6 +138,41 @@
       console.log(event.currentTarget)
       console.log(event.currentTarget.childNodes)
       // TODO: ...
+      let price = event.currentTarget.childNodes[3].innerHTML
+      let space = price.indexOf(" ")
+      let num = price.substring(0, space)
+      alert(event.currentTarget.childNodes[1].innerHTML + " " + num)
+      let row = document.createElement("tr")
+      let col1 = document.createElement("td")
+      let col2 = document.createElement("td")
+      let col3 = document.createElement("td")
+      let col4 = document.createElement("td")
+      let btn = document.createElement("button")
+      col1.innerHTML = event.currentTarget.childNodes[1].innerHTML
+      col2.innerHTML = "1"
+      col3.innerHTML = num
+      btn.innerHTML = "DEL"
+      btn.style = "font-size: 15px; width: 50px;"
+      btn.onclick = function() {deleteRow(this);};
+      col4.appendChild(btn)
+      //btn.style = "margin-top: 5px; width: 30px;"
+      row.appendChild(col1)
+      row.appendChild(col2)
+      row.appendChild(col3)
+      row.appendChild(col4)
+      document.getElementById("cart").appendChild(row)
+      count++
+      totalPrice += parseFloat(num)
+      document.getElementById("total-amount").innerHTML = count.toFixed(2)
+      document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
+    }
+    function deleteRow(r) {
+      var i = r.parentNode.parentNode.rowIndex;
+      totalPrice -= parseFloat(document.getElementById("cart").rows[i].cells.item(2).innerHTML)
+      document.getElementById("cart").deleteRow(i);
+      count--
+      document.getElementById("total-amount").innerHTML = count.toFixed(2)
+      document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
     }
   </script>
 </html>

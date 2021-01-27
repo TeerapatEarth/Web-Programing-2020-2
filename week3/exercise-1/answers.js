@@ -1,28 +1,48 @@
-function sayHello () {
-    // TODO: return คำว่า "Hello world!"
+function sayHello() {
+    return "Hello world!"
 }
 
-function isString (input) {
+function isString(input) {
     // input อาจจะเป็น String, Array, Number, Object หรือ Function ก็ได้
     // TODO: ถ้า input เป็น String ให้ return true, ถ้าไม่ใช่ return false
+    if (typeof input === 'string') {
+        return true
+    }
+    else {
+        return false
+    }
 }
 
-function isNumber (input) {
+function isNumber(input) {
     // input อาจจะเป็น String, Array, Number, Object หรือ Function ก็ได้
     // TODO: ถ้า input เป็น Number ให้ return true, ถ้าไม่ใช่ return false
+    return Number.isInteger(input)
 }
 
-function isArray (input) {
+function isArray(input) {
     // input อาจจะเป็น String, Array, Number, Object หรือ Function ก็ได้
     // TODO: ถ้า input เป็น Array ให้ return true, ถ้าไม่ใช่ return false
+    return Array.isArray(input)
 }
 
-function isObject (input) {
+function isObject(input) {
     // input อาจจะเป็น String, Array, Number, Object หรือ Function ก็ได้
     // TODO: ถ้า input เป็น Object ให้ return true, ถ้าไม่ใช่ return false
+    if ((typeof input === "object") && (input !== null) && Array.isArray(input) == false) {
+        return true
+    }
+    else {
+        return false
+    }
 }
 
-function isFunction (input) {
+function isFunction(input) {
     // input อาจจะเป็น String, Array, Number, Object หรือ Function ก็ได้
     // TODO: ถ้า input เป็น Function ให้ return true, ถ้าไม่ใช่ return false
+    if (typeof input === 'function') {
+        return true
+    }
+    else{
+        return false
+    }
 }

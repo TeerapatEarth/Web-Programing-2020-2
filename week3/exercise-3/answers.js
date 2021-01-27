@@ -4,6 +4,8 @@ function getDayName (input) {
 
     // hint
     // const daysInWeek = ['วันอาทิตย์', 'วันจันทร์', /*...*/]
+    let day = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"]
+    return day[input]
 }
 
 function formatDate (input) {
@@ -15,17 +17,39 @@ function formatDate (input) {
     //     year: 2021 // ปี
     // }
     // TODO: แปลง input เป็น String ในรูปแบบ "วันศุกร์ที่ 15 มกราคม พ.ศ. 2564"
-
+    let days = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"]
+    let month = ["มกราคม", "กุมพาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
+                "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
+    let year = input.year + 543
+    return days[input.day] + "ที่ " + input.date + " " + month[input.month] + " พ.ศ. " + year
 }
 
 function findTotal (input) {
     // input เป็น array ของตัวเลข
     // TODO: ให้หาผลบวกของเลขทั้งหมดใน input
+    let result = 0
+    for (let i = 0 ; i < input.length ; i ++){
+        result += input[i]
+    }
+    return result
 }
 
 function findMinMax (input) {
     // input เป็น array ของตัวเลข
     // TODO: ให้หาตัวเลขที่มากที่สุดและน้อยที่สุดใน input
+    let numMax = input[0]
+    let numMin = input[0]
+    for (let i = 0 ; i < input.length ; i++){
+        if(input[i] >= numMax){
+            numMax = input[i]
+        }
+    }
+    for (let i = 0 ; i < input.length ; i++){
+        if(input[i] < numMin){
+            numMin = input[i]
+        }
+    }
+    return {min:numMin, max:numMax}
 }
 
 function findBMI (input) {
@@ -44,4 +68,10 @@ function findBMI (input) {
     //     ...
     // ]
     // TODO: ให้คำนวณดัชนีมวลการ (Body Mass Index, bmi) ของแต่ละคน
+    let result = []
+    for (let i = 0 ; i < input.length ; i ++){
+        let numBmi = input[i].weight / (input[i].height/100)**2
+        result[i] = {name:input[i].name, height:input[i].height, weight:input[i].weight, bmi:numBmi.toFixed(2)}
+    }
+    return result
 }
