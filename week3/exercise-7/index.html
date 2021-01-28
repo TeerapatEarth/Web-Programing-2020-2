@@ -55,7 +55,7 @@
           </div>
         </div>
         <div class="column is-4" >
-          <h5 class="is-size-4">ตะกร้าสินค้า</h5>
+          <h5 class="is-size-4">ตระกร้าสินค้า</h5>
           <table id="cart" class="table is-fullwidth">
             <thead>
               <tr>
@@ -63,7 +63,6 @@
                 <td>จำนวน</td>
                 <td>ราคา</td>
                 <!-- PROBLEM 7.3 -->
-                <!-- <td>ลบ</td>  -->
                 <td>ลบ</td>
               </tr>
             </thead>
@@ -125,10 +124,6 @@
   <script>
     let count = 0
     let totalPrice = 0
-    let water = false
-    let cola = false
-    let milk = false
-    let greentea = false
     // Setup Event Listener
     for (let el of document.getElementsByClassName('product')) {
       el.addEventListener('click', onSelectProduct)
@@ -140,8 +135,9 @@
       // TODO: ...
       let price = event.currentTarget.childNodes[3].innerHTML
       let space = price.indexOf(" ")
-      let num = price.substring(0, space)
+      let num = price.substring(0, space) // เอาแค่ตัวเลข
       alert(event.currentTarget.childNodes[1].innerHTML + " " + num)
+      // Create Table
       let row = document.createElement("tr")
       let col1 = document.createElement("td")
       let col2 = document.createElement("td")
@@ -155,19 +151,20 @@
       btn.style = "font-size: 15px; width: 50px;"
       btn.onclick = function() {deleteRow(this);};
       col4.appendChild(btn)
-      //btn.style = "margin-top: 5px; width: 30px;"
       row.appendChild(col1)
       row.appendChild(col2)
       row.appendChild(col3)
       row.appendChild(col4)
       document.getElementById("cart").appendChild(row)
+      // Total price and to total count
       count++
       totalPrice += parseFloat(num)
       document.getElementById("total-amount").innerHTML = count.toFixed(2)
       document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
     }
+    // function delete row
     function deleteRow(r) {
-      var i = r.parentNode.parentNode.rowIndex;
+      var i = r.parentNode.parentNode.rowIndex; // find row
       totalPrice -= parseFloat(document.getElementById("cart").rows[i].cells.item(2).innerHTML)
       document.getElementById("cart").deleteRow(i);
       count--
