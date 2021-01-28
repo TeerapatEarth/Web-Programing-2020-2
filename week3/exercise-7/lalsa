@@ -1,0 +1,7 @@
+for (let i = 1 ; i < numrow - 1 ; i++){
+            let name = document.getElementById("cart").rows[i].cells.item(0).innerHTML
+            if(name === "น้ำดื่ม"){
+              console.log("aaaaa")
+              console.log(name)
+            }
+          }

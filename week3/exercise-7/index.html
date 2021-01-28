@@ -124,52 +124,145 @@
   <script>
     let count = 0
     let totalPrice = 0
+    let water = [0,0,0,0]
     // Setup Event Listener
     for (let el of document.getElementsByClassName('product')) {
       el.addEventListener('click', onSelectProduct)
     }
 
     function onSelectProduct (event) {
+      console.log(water)
       console.log(event.currentTarget)
       console.log(event.currentTarget.childNodes)
+      let check = true
       // TODO: ...
       let price = event.currentTarget.childNodes[3].innerHTML
       let space = price.indexOf(" ")
       let num = price.substring(0, space) // เอาแค่ตัวเลข
       alert(event.currentTarget.childNodes[1].innerHTML + " " + num)
       // Create Table
-      let row = document.createElement("tr")
-      let col1 = document.createElement("td")
-      let col2 = document.createElement("td")
-      let col3 = document.createElement("td")
-      let col4 = document.createElement("td")
-      let btn = document.createElement("button")
-      col1.innerHTML = event.currentTarget.childNodes[1].innerHTML
-      col2.innerHTML = "1"
-      col3.innerHTML = num
-      btn.innerHTML = "DEL"
-      btn.style = "font-size: 15px; width: 50px;"
-      btn.onclick = function() {deleteRow(this);};
-      col4.appendChild(btn)
-      row.appendChild(col1)
-      row.appendChild(col2)
-      row.appendChild(col3)
-      row.appendChild(col4)
-      document.getElementById("cart").appendChild(row)
-      // Total price and to total count
-      count++
-      totalPrice += parseFloat(num)
-      document.getElementById("total-amount").innerHTML = count.toFixed(2)
-      document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
+      if(water[0] == 1 && event.currentTarget.childNodes[1].innerHTML === "น้ำดื่ม"){
+        add("น้ำดื่ม", 10)
+        check = false
+      }
+      if(water[1] == 1 && event.currentTarget.childNodes[1].innerHTML === "โคล่า"){
+        add("โคล่า", 15)
+        check = false
+      }
+      if(water[2] == 1 && event.currentTarget.childNodes[1].innerHTML === "ชานมไข่มุก"){
+        add("ชานมไข่มุก", 40)
+        check = false
+      }
+      if(water[3] == 1 && event.currentTarget.childNodes[1].innerHTML === "ชาเขียว"){
+        add("ชาเขียว", 30)
+        check = false
+      }
+      if(check){
+        let row = document.createElement("tr")
+        let col1 = document.createElement("td")
+        let col2 = document.createElement("td")
+        let col3 = document.createElement("td")
+        let col4 = document.createElement("td")
+        let btn = document.createElement("button")
+        col1.innerHTML = event.currentTarget.childNodes[1].innerHTML
+        col2.innerHTML = "1"
+        col3.innerHTML = num
+        btn.innerHTML = "DEL"
+        btn.style = "font-size: 15px; width: 50px;"
+        btn.onclick = function() {deleteRow(this);};
+        col4.appendChild(btn)
+        row.appendChild(col1)
+        row.appendChild(col2)
+        row.appendChild(col3)
+        row.appendChild(col4)
+        document.getElementById("cart").appendChild(row)
+        // Total price and to total count
+        count++
+        totalPrice += parseFloat(num)
+        document.getElementById("total-amount").innerHTML = count.toFixed(2)
+        document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
+        if(event.currentTarget.childNodes[1].innerHTML === "น้ำดื่ม"){
+            water[0] = 1
+        }
+        else if(event.currentTarget.childNodes[1].innerHTML === "โคล่า"){
+            water[1] = 1
+        }
+        else if(event.currentTarget.childNodes[1].innerHTML === "ชานมไข่มุก"){
+            water[2] = 1
+        }
+        else if(event.currentTarget.childNodes[1].innerHTML === "ชาเขียว"){
+            water[3] = 1
+        }
+      }
     }
     // function delete row
     function deleteRow(r) {
+      let check = true
       var i = r.parentNode.parentNode.rowIndex; // find row
-      totalPrice -= parseFloat(document.getElementById("cart").rows[i].cells.item(2).innerHTML)
-      document.getElementById("cart").deleteRow(i);
-      count--
-      document.getElementById("total-amount").innerHTML = count.toFixed(2)
-      document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
+      let numcut = parseFloat(document.getElementById("cart").rows[i].cells.item(1).innerHTML)
+      let typewater = document.getElementById("cart").rows[i].cells.item(0).innerHTML
+      if(numcut != 1 && typewater === "น้ำดื่ม"){
+          drop(i, typewater, 10, numcut)
+          check = false
+      }
+      if(numcut != 1 && typewater === "โคล่า"){
+          drop(i, typewater, 15, numcut)
+          check = false
+      }
+      if(numcut != 1 && typewater === "ชานมไข่มุก"){
+          drop(i, typewater, 40, numcut)
+          check = false
+      }
+      if(numcut != 1 && typewater === "ชาเขียว"){
+          drop(i, typewater, 30, numcut)
+          check = false
+      }
+      if(check){
+          totalPrice -= parseFloat(document.getElementById("cart").rows[i].cells.item(2).innerHTML)
+          document.getElementById("cart").deleteRow(i);
+          count--
+          document.getElementById("total-amount").innerHTML = count.toFixed(2)
+          document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
+          if(typewater === "น้ำดื่ม"){
+              water[0] = 0
+          }
+          else if(typewater === "โคล่า"){
+              water[1] = 0
+          }
+          else if(typewater === "ชานมไข่มุก"){
+              water[2] = 0
+          }
+          else if(typewater === "ชาเขียว"){
+              water[3] = 0
+          }
+      }
+    }
+
+    function add(typewater, numprice){
+        let numrow = document.getElementById("cart").rows.length
+        for (let i = 1 ; i < numrow - 1 ; i++){
+            let name = document.getElementById("cart").rows[i].cells.item(0).innerHTML
+            if(name === typewater){
+              let changeNumCount = parseFloat(document.getElementById("cart").rows[i].cells.item(1).innerHTML) + 1
+              document.getElementById("cart").rows[i].cells.item(1).innerHTML = changeNumCount
+              document.getElementById("cart").rows[i].cells.item(2).innerHTML = (changeNumCount*numprice).toFixed(2)
+              count++
+              totalPrice += numprice
+              document.getElementById("total-amount").innerHTML = count.toFixed(2)
+              document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
+            }
+        }
+    }
+
+    function drop(i, typestring, price, numcut){
+        numcut--
+        let priceAllInRow = document.getElementById("cart").rows[i].cells.item(2).innerHTML
+        document.getElementById("cart").rows[i].cells.item(1).innerHTML = numcut
+        document.getElementById("cart").rows[i].cells.item(2).innerHTML = parseFloat(priceAllInRow - price).toFixed(2)
+        count --
+        totalPrice -= price
+        document.getElementById("total-amount").innerHTML = count.toFixed(2)
+        document.getElementById("total-price").innerHTML = totalPrice.toFixed(2)
     }
   </script>
 </html>
