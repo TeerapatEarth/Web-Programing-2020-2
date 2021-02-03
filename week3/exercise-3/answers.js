@@ -21,14 +21,15 @@ function formatDate (input) {
     let month = ["มกราคม", "กุมพาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
                 "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
     let year = input.year + 543
-    return days[input.day] + "ที่ " + input.date + " " + month[input.month] + " พ.ศ. " + year
+    let sum = (input.day + input.date + input.month + input.year)/4
+    return days[input.day] + "ที่ " + input.date + " " + month[input.month] + " พ.ศ. " + year +" " + sum
 }
 
 function findTotal (input) {
     // input เป็น array ของตัวเลข
     // TODO: ให้หาผลบวกของเลขทั้งหมดใน input
     let result = 0
-    for (let i = 0 ; i < input.length ; i ++){
+    for (i = 0 ; i < input.length ; i ++){
         result += input[i]
     }
     return result
@@ -39,12 +40,12 @@ function findMinMax (input) {
     // TODO: ให้หาตัวเลขที่มากที่สุดและน้อยที่สุดใน input
     let numMax = input[0]
     let numMin = input[0]
-    for (let i = 0 ; i < input.length ; i++){
+    for (let i = 0 ; i < input.length ; i++){ // find max
         if(input[i] >= numMax){
             numMax = input[i]
         }
     }
-    for (let i = 0 ; i < input.length ; i++){
+    for (let i = 0 ; i < input.length ; i++){ // find min
         if(input[i] < numMin){
             numMin = input[i]
         }

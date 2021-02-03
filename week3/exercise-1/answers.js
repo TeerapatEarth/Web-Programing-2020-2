@@ -5,7 +5,7 @@ function sayHello() {
 function isString(input) {
     // input อาจจะเป็น String, Array, Number, Object หรือ Function ก็ได้
     // TODO: ถ้า input เป็น String ให้ return true, ถ้าไม่ใช่ return false
-    if (typeof input === 'string') {
+    if (typeof input == 'string') {
         return true
     }
     else {
@@ -28,7 +28,7 @@ function isArray(input) {
 function isObject(input) {
     // input อาจจะเป็น String, Array, Number, Object หรือ Function ก็ได้
     // TODO: ถ้า input เป็น Object ให้ return true, ถ้าไม่ใช่ return false
-    if ((typeof input === "object") && (input !== null) && Array.isArray(input) == false) {
+    if ((typeof input == "object") && (input !== null) && Array.isArray(input) == false) {
         return true
     }
     else {
@@ -39,7 +39,7 @@ function isObject(input) {
 function isFunction(input) {
     // input อาจจะเป็น String, Array, Number, Object หรือ Function ก็ได้
     // TODO: ถ้า input เป็น Function ให้ return true, ถ้าไม่ใช่ return false
-    if (typeof input === 'function') {
+    if (typeof input == 'function') {
         return true
     }
     else{

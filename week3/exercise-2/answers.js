@@ -8,7 +8,7 @@ function convertADtoBE(input) {
         return "ไม่ถูกต้อง"
     }
     else {
-        let numberInt = parseInt(input) + 543
+        let numberInt = input + 543
         return "พ.ศ. " + numberInt
     }
 }
@@ -36,23 +36,17 @@ function getFullName(input) {
 
 function getFirstName(input) {
     // TODO: ให้ทำการตัดนามสกุลออกโดยใช้ indexOf() และ substring()
-    for (let i = 0 ; i < input.length ; i++){
-        if(input[i] === " "){
-            let space = input.indexOf(" ")
-            let firstname = input.substring(0, space)
-            return firstname
-        }
-    }
+    let space = input.indexOf(" ")
+    return input.substring(0, space)
 }
 
 function splitName(input) {
     // TODO: ให้ทำการแยก ชื่อต้นกับนามสกุล
-    for (let i = 0 ; i < input.length ; i++){
-        if(input[i] === " "){
-            let space = input.indexOf(" ")
-            let valuefname = input.substring(0, space)
-            let valuelname = input.substring(space + 1, input.length)
-            return {firstName:valuefname, lastName:valuelname}
-        }
-    }
+    input = "Aariz Bennett 19"
+    let space = input.indexOf(" ")
+    let valuefname = input.substring(0, space)
+    let valuelname = input.substring(space + 1)
+    let space2 = valuelname.indexOf(" ")
+    let age = valuelname.substring(space2 + 1)
+    return {firstName:valuefname, lastName:valuelname, age:age}
 }

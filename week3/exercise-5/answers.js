@@ -8,7 +8,7 @@ function insertBySplice (input) {
 function removeBySplice (input) {
     // TODO: ให้ใช้ฟังก์ชัน .splice() ในการ **ลบ (remove)** สมาชิกออกจาก Array  
     // เรียงลำดับตัวเลขให้ถูกต้อง
-    input.splice(4,1)
+    input.splice(4,2)
     return input
 }
 
@@ -22,7 +22,7 @@ function replaceBySplice (input) {
 function findAverage(input) {
     // TODO: ให้ใช้ฟังก์ชัน .map() และ/หรือ .filter() และ/หรือ .reduce() ในการหาค่าเฉลี่ยของตัวเลขทั้งหมดใน input  
     // (ให้ถือว่า null, undefined, '' เป็น 0)
-    let array = input.filter(zero => zero != null && zero != "")
+    let array = input.filter(zero => zero != null && zero != "" && zero != undefined)
     let result = array.reduce((num1, num2) => {return num1 + num2}, 0)/input.length
     return result
 }
