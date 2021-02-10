@@ -44,7 +44,7 @@
                                         <img :src="products.image" alt="Placeholder image">
                                     </figure>
                                 </div>
-                                <div class="card-content" :style="products.is_favorite ? { 'background-color': back } : null" @click="toggleIsClicked">
+                                <div class="card-content" :style="products.is_favorite ? { 'background-color': back } : null">
                                     <div class="media">
                                         <div class="media-content">
                                             <p id="title" class="title is-4">{{products.title}}</p>
@@ -81,7 +81,7 @@
             <div class="column is-3 pt-6 pl-0 pr-5">
                 <div style="display: flex;justify-content: space-between;">
                     <span class="is-size-4 mb-4">Cart ( {{cart.length}} )</span>
-                    <a class="is-danger mb-4 button" v-on:click="cart = []">Clear</a>
+                    <a class="is-danger mb-4 button" v-on:click="cart.splice(cart[0], 1)">Clear</a>
                 </div>
 
                 <!-- Card element start here------------------------------------------>

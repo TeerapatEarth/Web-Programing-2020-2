@@ -46,9 +46,9 @@
             <!-- ข้อ 1 ----------------------------------------------------------------- -->
             <div id="ex1" class="my-4">
                 <!-- ใส่โค้ดแสดงค่าของตัวแปรใน div นี้ -->
-                {{ id }}<br>
-                {{ fname }}
-                {{ lname }}
+                {{ student_id }}<br>
+                {{ student_fname }}
+                {{ student_lname }}
             </div>
             <hr>
         </div>
@@ -94,7 +94,7 @@
             <div id='ex3'>
                 <a v-if = "number_runner%2 === 1" class="button is-danger">Odd Number</a>
                 <a v-else-if = "number_runner%2 === 0 && number_runner !== 0" class="button is-success">Even Number</a>
-                <a v-else-if = "number_runner === 0"class="button is-info">Zero Number</a>
+                <a v-else class="button is-info">Zero Number</a>
             </div>
 
             <hr>
@@ -108,7 +108,7 @@
 
             <!-- ข้อ 4 ----------------------------------------------------------------- -->
             <div id='ex4'>
-                <ul><li v-for = "months in months"> - {{months}}</li></ul>
+                <ul><li v-for = "months in months">{{months}}</li></ul>
             </div>
 
             <hr>
@@ -182,7 +182,7 @@
 
             <!-- ข้อ 7 ----------------------------------------------------------------- -->
             <div id="ex7">
-                <ul v-for = "week in week"><li v-bind:style="{color: week.color}"> - {{week.title}}</li></ul>
+                <ul v-for = "week in week"><li v-bind:style="{color: week.color}">{{week.title}}</li></ul>
             </div>
 
         </div>

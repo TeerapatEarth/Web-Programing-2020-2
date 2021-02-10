@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic of Vue 2</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+</head>
+
+<body>
+    <div id='app'>
+        <div class="navbar is-light p-5">
+            <b class="mr-4">WEEK 5</b>
+            <a href="./index.html" class="mr-4">Basic of VueJS 2</a>
+            <a href="../ex2/index.html" class="mr-4">Shop from Vue</a>
+            <a href="../ex2/checkout.html">Checkout</a>
+        </div>
+
+
+
+
+        <div class="container is-max-desktop p-5">
+            <p class="my-4 has-background-danger-light p-3">
+                ข้อไหนอ่านโจทย์แล้วเกิดข้อสงสัยหรือไม่เข้าใจตรงไหนสามารถทักถามอาจารย์หรือ TA ก่อนได้เลย
+                ไม่จำเป็นต้องรอให้ถึงคาบเรียน
+            </p>
+
+            <p class="has-background-info-light p-2">สามารถแก้ไข Vue Instance ที่อยู่ใน
+                <code>&lt;script&gt;</code> ที่อยู่ส่วนล่างของ <code>checkout.html</code> ได้เลย!!! ไม่ต้องกลัวครับ
+            </p>
+
+
+
+            <p class="my-4"><b>ข้อ 1 </b>ประกาศตัวแปรเพื่อรับค่าจากแบบฟอร์มที่มีให้ ดังนี้
+                <li><code>prename</code> ใช้รับค่าจาก select ชื่อ <code>prename</code></li>
+                <li><code>fname</code> ใช้รับค่าจาก input ชื่อ <code>fname</code></li>
+                <li><code>lname</code> ใช้รับค่าจาก input ชื่อ <code>lname</code></li>
+                <li class="mb-4"><code>score</code> ใช้รับค่าจาก input ชื่อ <code>score</code></li>
+                เมื่อทำถูกต้องแล้ว ค่าต่าง ๆ ที่พิมพ์ไปจะแสดงเป็นตัวอักษรแดง ๆ ข้างล่างฟอร์ม
+            </p>
+            <p class="my-4 has-background-info-light p-3">
+                <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode และแก้ไข code ใน
+                <code>&lt;div id="ex1"&gt;</code>
+            </p>
+
+            <!-- ข้อ 1 --------------------------------------------- -->
+            <div id='ex1'>
+                <div class="columns">
+                    <div class="column is-2">
+                        <label>Prename</label><br>
+                        <div class="select">
+                            <select class="select" name="prename" v-model="prename" >
+                                <option>นาย</option>
+                                <option>นาง</option>
+                                <option>นางสาว</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <label>Firstname</label>
+                        <input class="input" name="fname" v-model="fname" />
+                    </div>
+                    <div class="column">
+                        <label>Lastname</label>
+                        <input class="input" name="lname" v-model="lname" />
+                    </div>
+                    <div class="column">
+                        <label>Score</label>
+                        <input class="input" name="score" type="number" v-model="score" />
+                    </div>
+                </div>
+                <code>prename = {{prename}}</code><br>
+                <code>fname = {{fname}}</code><br>
+                <code>lname = {{lname}}</code><br>
+                <code>score = {{score}}</code><br>
+            </div>
+
+            <hr>
+
+
+
+            <p class="my-4"><b>ข้อ 2 </b> สังเกตว่าจะมีปุ่ม Add Student อยู่ปุ่มนึง และมี table ที่มี column "Name" และ
+                "Score" โดยนักศึกษาจะต้องทำให้เมื่อกดปุ่มนี้แล้ว ข้อมูลที่ถูกกรอกจากข้อ 1
+                จะต้องเพิ่มใน table ที่เห็นอยู่ โดยให้สร้าง Method ชื่อว่า addStudent() โดยมีรายละเอียดที่จะต้องทำใน
+                Method นี้ ดังนี้
+            <ul style="list-style-type:lower-alpha;margin-left: 2rem;margin-bottom: 1.25rem;">
+                <li>ตรวจสอบข้อมูลทุกช่อง หากช่องไหนยังไม่ได้กรอก ให้ขึ้น Alert ว่า "Please enter all inputs"</li>
+                <li>ตรวจสอบข้อมูลจากช่องใส่คะแนน ค่าของคะแนนจะต้องอยู่ในช่วง 0-100 หากไม่ได้อยู่ในช่วงดังกล่าว ให้ขึ้น
+                    Alert ว่า "Score is incorrect"</li>
+                <li>ถ้าข้อมูลไม่ติดเงื่อนไขข้อ a. และ ข้อ b. แล้ว ให้เพิ่มข้อมูลที่กรอกไปในตัวแปร <code>students</code>
+                    ในรูปแบบของ <b>Object</b></li>
+                <li>ข้อมูลของช่องต่าง ๆ ที่อยู่ใน ข้อ 1. จะถูกเคลียค่าเป็นค่าว่างเหมือนเดิม</li>
+            </ul>
+            แต่ยังไม่จบแค่นั้น!! นักศึกษาจะต้อง loop ข้อมูลในตัวแปร <code>student</code> มาแสดงใน table
+            และแสดงข้อมูลตามตัวอย่างที่แสดงให้ดู ส่วนปุ่ม Delete จะใช้ในข้อถัดไป
+            </p>
+            <p class="my-4 has-background-info-light p-3">
+                <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode และแก้ไข code ใน <code>&lt;div id="ex2"&gt;</code>
+            </p>
+
+            <!-- ข้อ 2, ข้อ 3 --------------------------------------------- -->
+            <div id='ex2'>
+
+                <!-- ปุ่ม Add Student------------------- -->
+                <a class="button is-primary" v-on:click="addStudent">Add Student</a>
+
+                <div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Score</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody v-for="(students, index) in students">
+                            <!-- ตัวอย่างข้อมูล------------ -->
+                            <tr>
+                                <td>{{students.pre}}{{students.firstname}} {{students.lastname}}</td>
+                                <td>{{students.score}}</td>
+                                <td>
+                                    <!-- ปุ่ม Delete------------------- -->
+                                    <a class="button is-danger" v-on:click="removeStudent(index)" >Delete</a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr>
+
+            <p class="my-4"><b>ข้อ 3 </b> สร้าง Method ชื่อว่า <code>removeStudent()</code>
+                โดยจะมีหน้าที่ลบแถวของนักศึกษาที่ต้องการ โดยมีหลักการทำงานของ method ดังนี้
+                <li>รับ Parameter มา 1 ตัว คือ index ที่ได้จากการ loop</li>
+                <li class="mb-4">ลบ Object ตำแหน่งที่ index จาก Parameter ที่รับมา</li>
+                โดยเมื่อกดปุ่มลบของแถวที่ต้องการ จะทำการ call Method ดังกล่าว และแถวที่กด Delete
+                ก็จะต้องหายไปตามการทำงานของ Method
+            </p>
+            <p class="my-4 has-background-info-light p-3">
+                <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode และแก้ไข code ของปุ่ม Delete ใน <code>&lt;div id="ex2"&gt;</code>
+            </p>
+
+            <hr>
+
+            <p class="my-4"><b>ข้อ 4 </b> ให้สร้าง Computed Properties ขึ้นมา 2 ตัว
+                <li>ตัวแรกมีชื่อว่า <code>sumScore</code> โดยจะมีหน้าที่รวมคะแนนจากทุกคนจากตาราง<b>ข้อที่ 2.</b>
+                    โดยอัตโนมัติ
+                </li>
+                <li class="mb-4">ตัวที่สองมีชื่อว่า <code>avarageScore</code>
+                    โดยจะมีหน้าที่หาค่าคะแนนเฉลี่ยจากตาราง<b>ข้อที่
+                        2.</b>
+                    ซึ่งสามารถนำ
+                    <code>sumScore</code> มาใช้ต่อได้เลย
+                </li>
+                และแสดงผลลัพท์ที่ได้แทนที่ค่าตัวอย่างที่ให้มา
+            </p>
+            <p class="my-4 has-background-info-light p-3">
+                <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode และแก้ไข code
+                ใน <code>&lt;div id="ex4"&gt;</code>
+            </p>
+
+            <!-- ข้อ 4 --------------------------------------------- -->
+            <div id="ex4">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th class="is-warning">sum</th>
+                            <td>
+                                <!-- แสดงผลรวมคะแนนที่นี้ -->
+                                {{numsum}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="is-primary">avarage</th>
+                            <td>
+                                <!-- แสดงค่าเฉลี่ยที่นี่ -->
+                                {{numavarage}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <p class="my-4"><b>ข้อ 5 </b> ในการเปลี่ยนแปลงข้อมูลที่สำคัญ จะต้องมีการเก็บ log
+                บันทึกการเปลี่ยนแปลงของข้อมูล เพื่อให้สามารถตรวจสอบการเปลี่ยนแปลงย้อนหลังได้
+                โดยในข้อนี้จะให้ใช้ <b>watch</b> ในการดักจับการเปลี่ยนแปลงข้อมูลของตัวแปร <code>day_select</code>
+                โดยค่าของ
+                <code>day_select</code> จะเปลี่ยนแปลงเมื่อเลือก radio อันอื่น<br>
+                โดยเมื่อค่าของ <code>day_select</code> เปลี่ยนแปลง
+                จะมีการบันทึก log ดังนี้
+            <ul style="list-style-type:lower-alpha;margin-left: 2rem;margin-bottom: 1.25rem;">
+                <li>บันทึกเวลาที่เปลี่ยนแปลงข้อมูล โดยใช้ฟังก์ชัน <code>Date()</code> และ
+                    <b class="has-text-danger">จัด Formatให้เหมือนในตัวอย่าง</b>
+                    <a target="blank" href="https://www.w3schools.com/js/js_dates.asp">ดูการใช้งาน Date() เพิ่มเติม</a>
+                </li>
+                <li>ค่าของ Value ที่เปลี่ยน โดยมี "-->" คั่นอยู่ระหว่างค่าเก่าและค่าใหม่ โดยในตัวอย่างคือเปลี่ยนจาก 0
+                    เป็น 1</li>
+                <li>ค่าของ Title ที่เปลี่ยน โดยมี "-->" คั่นอยู่ระหว่างค่าเก่าและค่าใหม่ โดยในตัวอย่างคือเปลี่ยนจาก
+                    Sunday
+                    เป็น Monday</li>
+            </ul>
+            ข้อมูล log ดังกล่าวจะถูกเก็บเป็น Object ไว้ใน Array ชื่อว่า
+            <code>logs</code> และนักศึกษาจะต้อง loop log ทั้งหมดให้แสดงใน table ที่ให้มาเป็นตัวอย่าง
+
+            </p>
+            <p class="my-4 has-background-info-light p-3">
+                <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode และแก้ไข code ใน
+                <code>&lt;div id="ex5"&gt;</code>
+            </p>
+
+            <!-- ข้อ 5 --------------------------------------------- -->
+            <div id="ex5">
+                <div class="control">
+                    <label v-for='day in day_data' class="radio">
+                        <input type="radio" name="answer" v-model="day_select" :value="day.value">
+                        {{day.title}}
+                    </label>
+                </div>
+
+                <h1 class="is-size-4 my-5">Simple Log Table</h1>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Value Change</th>
+                            <th>Title Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ตัวอย่างข้อมูล------------ -->
+                        <tr v-for="logs in logs">
+                            <td>{{logs.date}}</td>
+                            <td>{{logs.oldval}} --> {{logs.newval}}</td>
+                            <td>{{logs.oldday}} --> {{logs.newday}}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- vue script ------------------------------------------- -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                students: [],
+                day_data: [
+                    { title: 'Sunday', value: '0' },
+                    { title: 'Monday', value: '1' },
+                    { title: 'Tuesday', value: '2' },
+                    { title: 'Wendesday', value: '3' },
+                    { title: 'Thursday', value: '4' },
+                    { title: 'Friday', value: '5' },
+                    { title: 'Saturday', value: '6' },
+                ],
+                day_select: 0,
+                logs: [],
+                prename: "",
+                fname:"",
+                lname:"",
+                score:"",
+                sum: 0,
+                avarage: 0,
+                day_select:""
+            },
+            methods:{
+                addStudent: function(){
+                    var addstudent = true
+                    if(this.prename === "" || this.fname === "" || this.lname === "" || this.score === ""){ //check 2.1
+                        alert("Please enter all inputs")
+                        addstudent = false
+                    }
+                    if(parseInt(this.score) < 0 || parseInt(this.score) > 100){ //check 2.2
+                        alert("Score is incorrect")
+                        addstudent = false
+                    }
+                    if(addstudent){
+                        var info = {pre: this.prename, firstname: this.fname, lastname: this.lname, score: this.score}
+                        this.students.splice(this.students.length, 0, info)
+                        this.sum += parseInt(this.score)
+                        this.avarage = this.sum/this.students.length
+                        this.prename = ""
+                        this.fname = ""
+                        this.lname = ""
+                        this.score = ""
+                    }
+                },
+                removeStudent: function(idx){
+                    this.sum -= parseInt(this.students[idx].score)
+                    this.students.splice(idx, 1)
+                    if(this.sum != 0){
+                        this.avarage = this.sum/this.students.length
+                    }
+                    else{
+                        this.avarage = 0
+                    }
+                }
+            },
+            computed:{
+                numsum (){
+                    return this.sum
+                },
+                numavarage (){
+                    return this.avarage
+                }
+            },
+            watch:{
+                day_select(newVal, oldVal){
+                    let day = Date()
+                    console.log(Date())
+                    let space1 = day.substring(day.indexOf(" ")+1)
+                    let numday = space1.substring(space1.indexOf(" ")+1, space1.indexOf(" ")+3)
+                    let month = space1.substring(0, 3)
+                    let space2 = space1.substring(space1.indexOf(" ")+1)
+                    let year = space2.substring(space2.indexOf(" ")+1, space2.indexOf(" ")+5)
+                    let space3 = space2.substring(space2.indexOf(" ")+1)
+                    let time = space3.substring(space3.indexOf(" ")+1, space3.indexOf(" ")+9)
+                    let daychange = numday + " " + month + " " + year + " " + time
+                    if(oldVal === ""){
+                        let dateformat = 
+                        datachange = {date: daychange, oldval: newVal, newval: newVal, 
+                            oldday: this.day_data[newVal].title, newday:this.day_data[newVal].title}
+                    }
+                    else{
+                        datachange = {date: daychange, oldval: oldVal, newval: newVal, 
+                            oldday: this.day_data[oldVal].title, newday:this.day_data[newVal].title}
+                    }
+                    this.logs.splice(this.logs.length, 0, datachange)
+                }
+            }
+        })
+    </script>
+
+
+
+
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+</body>
+
+</html>

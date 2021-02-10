@@ -57,9 +57,4 @@ var app = new Vue({
         show_modal: false,
         back:"#F0F4C3",
     },
-    methods: {
-        toggleIsClicked: function () {
-          this.is_favorite = !this.is_favorite
-        },
-    },
 })
