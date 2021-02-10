@@ -146,7 +146,7 @@
             <div class="column is-3 pt-6 pl-0 pr-5">
                 <div style="display: flex;justify-content: space-between;">
                     <span class="is-size-4 mb-4">Cart ({{cart.length}})</span>
-                    <a @click="cart = [], priceall = 0" class="is-danger mb-4 button">Clear</a>
+                    <a @click="setquantity" class="is-danger mb-4 button">Clear</a>
                 </div>
 
                 <!-- Card element start here ------------------------------------------>
@@ -309,6 +309,11 @@
                     var localprice = JSON.stringify(this.priceall)
                     localStorage.setItem("priceall", localprice)
                     location.href = "./checkout.html"
+                },
+                setquantity: function(){
+                    this.products.map(x => x.quantity = 0)
+                    this.priceall = 0
+                    this.cart = []
                 }
             },
         })

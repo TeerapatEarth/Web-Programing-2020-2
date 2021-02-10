@@ -270,8 +270,6 @@
                 fname:"",
                 lname:"",
                 score:"",
-                sum: 0,
-                avarage: 0,
                 day_select:""
             },
             methods:{
@@ -288,8 +286,6 @@
                     if(addstudent){
                         var info = {pre: this.prename, firstname: this.fname, lastname: this.lname, score: this.score}
                         this.students.splice(this.students.length, 0, info)
-                        this.sum += parseInt(this.score)
-                        this.avarage = this.sum/this.students.length
                         this.prename = ""
                         this.fname = ""
                         this.lname = ""
@@ -299,34 +295,32 @@
                 removeStudent: function(idx){
                     this.sum -= parseInt(this.students[idx].score)
                     this.students.splice(idx, 1)
-                    if(this.sum != 0){
-                        this.avarage = this.sum/this.students.length
-                    }
-                    else{
-                        this.avarage = 0
-                    }
                 }
             },
             computed:{
                 numsum (){
-                    return this.sum
+                    let sum = 0
+                    this.students.map(x => sum += parseInt(x.score))
+                    return sum
                 },
                 numavarage (){
-                    return this.avarage
+                    let avarage = 0
+                    this.students.map(x => avarage += parseInt(x.score))
+                    if(this.students.length == 0){
+                        avarage = 0
+                    }
+                    else{
+                        avarage = avarage/this.students.length
+                    }
+                    return avarage
                 }
             },
             watch:{
                 day_select(newVal, oldVal){
-                    let day = Date()
-                    console.log(Date())
-                    let space1 = day.substring(day.indexOf(" ")+1)
-                    let numday = space1.substring(space1.indexOf(" ")+1, space1.indexOf(" ")+3)
-                    let month = space1.substring(0, 3)
-                    let space2 = space1.substring(space1.indexOf(" ")+1)
-                    let year = space2.substring(space2.indexOf(" ")+1, space2.indexOf(" ")+5)
-                    let space3 = space2.substring(space2.indexOf(" ")+1)
-                    let time = space3.substring(space3.indexOf(" ")+1, space3.indexOf(" ")+9)
-                    let daychange = numday + " " + month + " " + year + " " + time
+                    let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    let day = new Date()
+                    let daychange = day.getDate() + " " + month[day.getMonth()] + " " + day.getFullYear() + " " + day.getHours() + ":" +
+                    day.getMinutes() + ":"+day.getSeconds()
                     if(oldVal === ""){
                         let dateformat = 
                         datachange = {date: daychange, oldval: newVal, newval: newVal, 
