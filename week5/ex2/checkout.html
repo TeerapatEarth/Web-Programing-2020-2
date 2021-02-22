@@ -222,7 +222,7 @@
                                 <td style="width: 25%;">{{product.title}}</td>
                                 <td>{{product.price}}</td>
                                 <td>{{product.quantity}}</td>
-                                <td>{{product.oneproduct}}</td>
+                                <td>{{product.price*product.quantity}}</td>
                             </tr>
                             <tr>
                                 <td colspan="2"></td>
@@ -247,7 +247,6 @@
                 modal_confirm_order: false,
                 show_modal: false,
                 order_detail: {},
-                priceall: 0,
                 fname:"",
                 lname:"",
                 tel:"",
@@ -260,9 +259,12 @@
             },
             created (){
                 this.cart = JSON.parse(localStorage.getItem("cart"))
-                this.priceall = JSON.parse(localStorage.getItem("priceall"))
-                for(let i = 0; i < this.cart.length; i++){
-                    this.cart[i].oneproduct = this.cart[i].quantity*this.cart[i].price
+            },
+            computed: {
+                priceall(){
+                    let ans = 0
+                    this.cart.map(x => ans += x.quantity*x.price)
+                    return ans
                 }
             }
         })

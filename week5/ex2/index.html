@@ -293,21 +293,13 @@
                     }
                 },
                 removeFromCart: function(pro){
-                    if(pro.quantity > 1){
-                        this.cart[this.cart.indexOf(pro)].quantity--
-                        this.priceall -= this.cart[this.cart.indexOf(pro)].price
-                    }
-                    else{
-                        this.cart[this.cart.indexOf(pro)].quantity--
-                        this.priceall -= this.cart[this.cart.indexOf(pro)].price
-                        this.cart.splice(this.cart.indexOf(pro), 1)
-                    }
+                    this.priceall -= this.cart[this.cart.indexOf(pro)].quantity*this.cart[this.cart.indexOf(pro)].price
+                    this.cart[this.cart.indexOf(pro)].quantity = 0
+                    this.cart.splice(this.cart.indexOf(pro), 1)
                 },
                 goCheckout: function(){
                     var myJson1 = JSON.stringify(this.cart)
                     localStorage.setItem("cart", myJson1)
-                    var localprice = JSON.stringify(this.priceall)
-                    localStorage.setItem("priceall", localprice)
                     location.href = "./checkout.html"
                 },
                 setquantity: function(){
@@ -315,7 +307,7 @@
                     this.priceall = 0
                     this.cart = []
                 }
-            },
+            }
         })
     </script>
 

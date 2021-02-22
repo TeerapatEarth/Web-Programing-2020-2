@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/css/all.css" rel="stylesheet" />
+  <link href="/css/bulma.css" rel="stylesheet" />
+  <script src="/js/all.js"></script>
+  <script src="/js/vue.js"></script>
+  <title>test</title>
+</head>
+<style>
+  #inputBlack:after {
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    top: -5px;
+    left: -6px;
+    position: relative;
+    background-color: black;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid black;
+  }
+
+  #inputBlack:checked:after {
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    top: -5px;
+    left: -6px;
+    position: relative;
+    background-color: white;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 6px solid black;
+  }
+
+  #inputRed:after {
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    top: -5px;
+    left: -6px;
+    position: relative;
+    background-color: red;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid red;
+  }
+
+  #inputRed:checked:after {
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    top: -5px;
+    left: -6px;
+    position: relative;
+    background-color: white;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 6px solid red;
+  }
+
+  #inputGreen:after {
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    top: -5px;
+    left: -6px;
+    position: relative;
+    background-color: green;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid green;
+  }
+
+  #inputGreen:checked:after {
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    top: -5px;
+    left: -6px;
+    position: relative;
+    background-color: white;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 6px solid green;
+  }
+</style>
+
+<body>
+  <section id="app">
+    <div class="container">
+      <section class="hero">
+        <div class="hero-body">
+          <p class="title">
+            My ToDo List
+            <button class="button is-primary" @click="showModalList">+</button>
+          </p>
+          <!-- <p class="subtitle">Hero subtitle</p> -->
+        </div>
+      </section>
+      <p class="subtitle my-2">
+        Completed: {{numComplete}} Incomplete: {{numIncomplete}}
+      </p>
+      <p class="subtitle my-2">
+        Flagged: {{numFlag}}
+      </p>
+      <template v-for="list in todoLists">
+        <div class="columns">
+          <div class="column is-8" :key="keyCheck">
+            <div class="columns">
+              <div class="column is-1">
+                <h1 style="font-size: 20px;">{{list.name}}</h1>
+              </div>
+              <div class="column is-1">
+                <button class="button is-primary" @click="editList(list)">Edit</button>
+              </div>
+              <div class="column is-1">
+                <button class="button is-danger" @click="modaldeleteList(list)">Delete</button>
+              </div>
+            </div>
+            <div class="box level py-3 my-2" v-for="item in sortAlpha" v-if="item.listId == list.id">
+              <div class="control">
+                <label class="checkbox"
+                  v-bind:style="addStyle(item)">
+                  <input type="checkbox" v-model="item.check" @click="saveCheckbox(item)" />
+                    {{item.name}}
+                  <template v-for="sty in customArr">
+                    <template v-if="sty.id == item.id">
+                      <template v-if="sty.dueDate != ''">
+                        ( Due date {{sty.dueDate}} )
+                      </template>
+                      <template v-if="sty.flagStatus == true">
+                        <i class="fas fa-flag"></i>
+                      </template>
+                    </template>
+                  </template>
+                </label>
+              </div>
+              <div class="level-right">
+                <span class="icon is-small" @click="edit(item)">
+                  <i class="fas fa-edit"></i>
+                </span>
+                <span class="icon is-small ml-5" @click="removeTask(item, item.id)">
+                  <i class="fas fa-trash-alt"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-4 mt-6">
+            <div class="card">
+              <header class="card-header has-background-primary">
+                <p class="card-header-title">Filter</p>
+                <p class="card-header-icon">
+                  <span class="card-header-icon icon">
+                    <i class="fas fa-filter"></i>
+                  </span>
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  <div class="control">
+                    <label class="checkbox">
+                      <input type="checkbox" v-model="hide" />
+                      Hide completed tasks
+                    </label>
+                  </div>
+                  <div class="control">
+                    <label class="checkbox">
+                      <input type="checkbox" v-model="flag" />
+                      Show only flagged tasks
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card mt-5">
+              <header class="card-header has-background-primary">
+                <p class="card-header-title">Sort</p>
+                <p class="card-header-icon">
+                  <span class="card-header-icon icon">
+                    <i class="fas fa-filter"></i>
+                  </span>
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" value="alpha" v-model="sort"/>
+                      Sort alphabetically
+                    </label>
+                  </div>
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" value="incompletefirst" v-model="sort"/>
+                      Sort incomplete task first
+                    </label>
+                  </div>
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" value="flagfirst" v-model="sort"/>
+                      Sort flaged taskt first
+                    </label>
+                  </div>
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" value="date" v-model="sort"/>
+                      Sort by due date (ascending)
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <div class="columns mt-5">
+        <div class="columns">
+          <div class="column is-12">
+            <h1 style="font-size: 40px;">Add New Task</h1>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-3">
+          <div class="control">
+            <input type="text" class="input" placeholder="Task Name" v-model="newName">
+          </div>
+        </div>
+        <div class="column is-2">
+          <div class="select">
+            <select v-model="selectList">
+              <option>--Select List--</option>
+              <option v-for="list in todoLists" :value="list.id">{{list.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="column is-2">
+          <input type="date" id="duedate" name="duedate" v-model="date" class="input">
+        </div>
+        <div class="column is-1">
+          <label class="checkbox mt-2">
+            <input type="checkbox" v-model="flagStatus">
+            Flag
+          </label>
+        </div>
+        <div class="column is-2">
+          <input class="mr-6 mt-2" id="inputBlack" type="radio" value="Black" v-model="iconColor">
+          <input class="mr-6 mt-2" id="inputRed" type="radio" value="Red" v-model="iconColor">
+          <input class="mt-2" id="inputGreen" type="radio" value="Green" v-model="iconColor">
+        </div>
+        <div class="column is 2">
+          <button class="button is-primary" @click="addTask">Save</button>
+        </div>
+      </div>
+      <div class="modal" :class="{'is-active' : show_modalName}">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Edit Task</p>
+            <button class="delete" aria-label="close" @click="show_modalName = !show_modalName"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="columns">
+              <div class="column is-9">
+                <input class="input" type="text" placeholder="Task Name" v-model="input_edit" />
+              </div>
+              <div class="column is-3 mt-2">
+                <select v-model="edit_selectList">
+                  <option>--Select List--</option>
+                  <option v-for="list in todoLists" :value="list.id">{{list.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column is-4">
+                <input type="date" id="duedate" name="duedate" class="input" v-model="edit_date">
+              </div>
+              <div class="column is-2">
+                <label class="checkbox mt-2">
+                  <input type="checkbox" v-model="edit_flagStatus">
+                  Flag
+                </label>
+              </div>
+              <div class="column is-4">
+                <input class="mr-6 mt-2" id="inputBlack" type="radio" value="Black" v-model="edit_iconColor">
+                <input class="mr-6 mt-2" id="inputRed" type="radio" value="Red" v-model="edit_iconColor">
+                <input class="mt-2" id="inputGreen" type="radio" value="Green" v-model="edit_iconColor">
+              </div>
+              <div class="column is-2">
+                <button class="button is-success" @click="saveName">Save</button>
+              </div>
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+          </footer>
+        </div>
+      </div>
+      <div class="modal" :class="{'is-active' : show_delete}">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <section class="modal-card-body">
+            Are you sure you want to delete "{{deleteName}}" ?
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-danger" @click="confirmDelete">Confirm</button>
+            <button class="button" @click="show_delete = !show_delete">Cancel</button>
+          </footer>
+        </div>
+      </div>
+      <div class="modal" :class="{'is-active' : show_addList}">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">New List</p>
+            <button class="delete" aria-label="close" @click="show_addList = !show_addList"></button>
+          </header>
+          <section class="modal-card-body">
+            <input class="input" type="text" placeholder="Task Name" v-model="createList"/>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success" @click="addList">Save</button>
+          </footer>
+        </div>
+      </div>
+      <div class="modal" :class="{'is-active' : show_editList}">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Edit List</p>
+            <button class="delete" aria-label="close" @click="show_editList = !show_editList"></button>
+          </header>
+          <section class="modal-card-body">
+            <input class="input" type="text" placeholder="List Name" v-model="edit_listName"/>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success" @click="saveEditList">Save</button>
+          </footer>
+        </div>
+      </div>
+      <div class="modal" :class="{'is-active' : show_deleteList}">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Delete List</p>
+            <button class="delete" aria-label="close" @click="show_deleteList = !show_deleteList"></button>
+          </header>
+          <section class="modal-card-body">
+            Are you sure that you want to delete "{{keep_deleteList.name}}" list ?
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-danger" @click="deleteList">Ok</button>
+            <button class="button" @click="show_deleteList = !show_deleteList">Cancel</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data: {
+        idCount: 0,
+        idList: 0,
+        keep_idList: 0,
+        keep_deleteList: 0,
+        newName: "",
+        editName: "",
+        deleteName: "",
+        createList: "",
+        selectList: "--Select List--",
+        edit_selectList: "",
+        edit_date:"",
+        edit_flagStatus: false,
+        edit_iconColor:"Black",
+        edit_listName: "",
+        deleteObj: "",
+        date:"",
+        flagStatus: false,
+        iconColor: "Black",
+        input_edit: "",
+        flag: false,
+        hide: false,
+        sort: "alpha",
+        line: "line-through",
+        arrItem: [],
+        todoLists: [],
+        customArr: [],
+        show_modalName: false,
+        keyCheck: 0,
+        show_delete: false,
+        show_addList: false,
+        show_editList: false,
+        show_deleteList: false
+      },
+      methods:{
+        showModalList: function (){  // เปิดหน้าต่างเพิ่ม list
+          this.show_addList = !this.show_addList
+        },
+        addList: function(){ // เพิ่ม list
+          if(this.createList == ""){
+            alert("โปรดใส่ชื่อ")
+          }
+          else{
+            this.todoLists.push({
+            id: this.idList++,
+            name: this.createList
+            })
+            this.createList = ""
+            this.show_addList = !this.show_addList
+          }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

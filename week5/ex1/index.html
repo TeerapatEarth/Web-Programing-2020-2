@@ -50,7 +50,7 @@
                     <div class="column is-2">
                         <label>Prename</label><br>
                         <div class="select">
-                            <select class="select" name="prename" v-model="prename" >
+                            <select class="select" name="prename" v-model="prename">
                                 <option>นาย</option>
                                 <option>นาง</option>
                                 <option>นางสาว</option>
@@ -121,7 +121,7 @@
                                 <td>{{students.score}}</td>
                                 <td>
                                     <!-- ปุ่ม Delete------------------- -->
-                                    <a class="button is-danger" v-on:click="removeStudent(index)" >Delete</a>
+                                    <a class="button is-danger" v-on:click="removeStudent(index)">Delete</a>
                                 </td>
                             </tr>
 
@@ -140,7 +140,8 @@
                 ก็จะต้องหายไปตามการทำงานของ Method
             </p>
             <p class="my-4 has-background-info-light p-3">
-                <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode และแก้ไข code ของปุ่ม Delete ใน <code>&lt;div id="ex2"&gt;</code>
+                <b>วิธีทำ:</b> เปิดไฟล์นี้ในโปรแกรม vscode และแก้ไข code ของปุ่ม Delete ใน
+                <code>&lt;div id="ex2"&gt;</code>
             </p>
 
             <hr>
@@ -178,6 +179,13 @@
                             <td>
                                 <!-- แสดงค่าเฉลี่ยที่นี่ -->
                                 {{numavarage}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="is-primary">avarage</th>
+                            <td>
+                                <!-- แสดงค่าเฉลี่ยที่นี่ -->
+                                {{nummax}}
                             </td>
                         </tr>
                     </tbody>
@@ -267,24 +275,23 @@
                 day_select: 0,
                 logs: [],
                 prename: "",
-                fname:"",
-                lname:"",
-                score:"",
-                day_select:""
+                fname: "",
+                lname: "",
+                score: "",
             },
-            methods:{
-                addStudent: function(){
+            methods: {
+                addStudent: function () {
                     var addstudent = true
-                    if(this.prename === "" || this.fname === "" || this.lname === "" || this.score === ""){ //check 2.1
+                    if (this.prename === "" || this.fname === "" || this.lname === "" || this.score === "") { //check 2.1
                         alert("Please enter all inputs")
                         addstudent = false
                     }
-                    if(parseInt(this.score) < 0 || parseInt(this.score) > 100){ //check 2.2
+                    if (parseInt(this.score) < 0 || parseInt(this.score) > 100) { //check 2.2
                         alert("Score is incorrect")
                         addstudent = false
                     }
-                    if(addstudent){
-                        var info = {pre: this.prename, firstname: this.fname, lastname: this.lname, score: this.score}
+                    if (addstudent) {
+                        var info = { pre: this.prename, firstname: this.fname, lastname: this.lname, score: this.score }
                         this.students.splice(this.students.length, 0, info)
                         this.prename = ""
                         this.fname = ""
@@ -292,47 +299,51 @@
                         this.score = ""
                     }
                 },
-                removeStudent: function(idx){
+                removeStudent: function (idx) {
                     this.sum -= parseInt(this.students[idx].score)
                     this.students.splice(idx, 1)
                 }
             },
-            computed:{
-                numsum (){
+            computed: {
+                numsum() {
                     let sum = 0
                     this.students.map(x => sum += parseInt(x.score))
                     return sum
                 },
-                numavarage (){
+                numavarage() {
                     let avarage = 0
                     this.students.map(x => avarage += parseInt(x.score))
-                    if(this.students.length == 0){
+                    if (this.students.length == 0) {
                         avarage = 0
                     }
-                    else{
-                        avarage = avarage/this.students.length
+                    else {
+                        avarage = avarage / this.students.length
                     }
                     return avarage
-                }
-            },
-            watch:{
-                day_select(newVal, oldVal){
-                    let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-                    let day = new Date()
-                    let daychange = day.getDate() + " " + month[day.getMonth()] + " " + day.getFullYear() + " " + day.getHours() + ":" +
-                    day.getMinutes() + ":"+day.getSeconds()
-                    if(oldVal === ""){
-                        let dateformat = 
-                        datachange = {date: daychange, oldval: newVal, newval: newVal, 
-                            oldday: this.day_data[newVal].title, newday:this.day_data[newVal].title}
+                },
+                nummax() {
+                    let ans = 0
+                    for (let i = 0; i < this.students.length; i++) {
+                        if (ans < this.students[i].score) {
+                            ans = this.students[i].score
+                        }
                     }
-                    else{
-                        datachange = {date: daychange, oldval: oldVal, newval: newVal, 
-                            oldday: this.day_data[oldVal].title, newday:this.day_data[newVal].title}
-                    }
-                    this.logs.splice(this.logs.length, 0, datachange)
-                }
+                    return ans
             }
+        },
+            watch: {
+            day_select(newVal, oldVal) {
+                let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                let day = new Date()
+                let daychange = day.getDate() + " " + month[day.getMonth()] + " " + day.getFullYear() + " " + day.getHours() + ":" +
+                    day.getMinutes() + ":" + day.getSeconds()
+                datachange = {
+                    date: daychange, oldval: oldVal, newval: newVal,
+                    oldday: this.day_data[oldVal].title, newday: this.day_data[newVal].title
+                }
+                this.logs.push(datachange)
+            }
+        }
         })
     </script>
 
