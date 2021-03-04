@@ -9,7 +9,7 @@
   <link href="/css/bulma.css" rel="stylesheet" />
   <script src="/js/all.js"></script>
   <script src="/js/vue.js"></script>
-  <title>test</title>
+  <title>My ToDo List</title>
 </head>
 <style>
   #inputBlack:after {
@@ -129,21 +129,16 @@
                 <button class="button is-danger" @click="modaldeleteList(list)">Delete</button>
               </div>
             </div>
-            <div class="box level py-3 my-2" v-for="item in sortAlpha" v-if="item.listId == list.id">
+            <div class="box level py-3 my-2" v-for="item in arr" v-if="item.listId == list.id">
               <div class="control">
-                <label class="checkbox"
-                  v-bind:style="addStyle(item)">
-                  <input type="checkbox" v-model="item.check" @click="saveCheckbox(item)" />
-                    {{item.name}}
-                  <template v-for="sty in customArr">
-                    <template v-if="sty.id == item.id">
-                      <template v-if="sty.dueDate != ''">
-                        ( Due date {{sty.dueDate}} )
-                      </template>
-                      <template v-if="sty.flagStatus == true">
-                        <i class="fas fa-flag"></i>
-                      </template>
-                    </template>
+                <label class="checkbox">
+                  <input type="checkbox" v-model="item.check" @click="saveCheckbox(item), hideTask(list.id)" />
+                  {{item.name}}
+                  <template v-if="item.dueDate != ''">
+                    ( Due date {{sty.dueDate}} )
+                  </template>
+                  <template v-if="item.flagStatus == true">
+                    <i class="fas fa-flag"></i>
                   </template>
                 </label>
               </div>
@@ -171,13 +166,13 @@
                 <div class="content">
                   <div class="control">
                     <label class="checkbox">
-                      <input type="checkbox" v-model="hide" />
+                      <input type="checkbox" @click="test(list.id)" />
                       Hide completed tasks
                     </label>
                   </div>
                   <div class="control">
                     <label class="checkbox">
-                      <input type="checkbox" v-model="flag" />
+                      <input type="checkbox" @click="test2(list.id)" />
                       Show only flagged tasks
                     </label>
                   </div>
@@ -197,25 +192,25 @@
                 <div class="content">
                   <div class="control">
                     <label class="radio">
-                      <input type="radio" value="alpha" v-model="sort"/>
+                      <input type="radio" value="alpha" @click="sortalpha(list.id)" v-model="list.sort" />
                       Sort alphabetically
                     </label>
                   </div>
                   <div class="control">
                     <label class="radio">
-                      <input type="radio" value="incompletefirst" v-model="sort"/>
+                      <input type="radio" value="incompletefirst" v-model="list.sort" @click="sortincomplete(list.id)" />
                       Sort incomplete task first
                     </label>
                   </div>
                   <div class="control">
                     <label class="radio">
-                      <input type="radio" value="flagfirst" v-model="sort"/>
+                      <input type="radio" value="flagfirst" @click="sortFlag(list.id)" v-model="list.sort" />
                       Sort flaged taskt first
                     </label>
                   </div>
                   <div class="control">
                     <label class="radio">
-                      <input type="radio" value="date" v-model="sort"/>
+                      <input type="radio" value="date" @click="sortDate(list.id)" v-model="list.sort" />
                       Sort by due date (ascending)
                     </label>
                   </div>
@@ -327,7 +322,7 @@
             <button class="delete" aria-label="close" @click="show_addList = !show_addList"></button>
           </header>
           <section class="modal-card-body">
-            <input class="input" type="text" placeholder="Task Name" v-model="createList"/>
+            <input class="input" type="text" placeholder="Task Name" v-model="createList" />
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success" @click="addList">Save</button>
@@ -342,7 +337,7 @@
             <button class="delete" aria-label="close" @click="show_editList = !show_editList"></button>
           </header>
           <section class="modal-card-body">
-            <input class="input" type="text" placeholder="List Name" v-model="edit_listName"/>
+            <input class="input" type="text" placeholder="List Name" v-model="edit_listName" />
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success" @click="saveEditList">Save</button>
@@ -381,22 +376,19 @@
         createList: "",
         selectList: "--Select List--",
         edit_selectList: "",
-        edit_date:"",
+        edit_date: "",
         edit_flagStatus: false,
-        edit_iconColor:"Black",
+        edit_iconColor: "Black",
         edit_listName: "",
         deleteObj: "",
-        date:"",
+        date: "",
         flagStatus: false,
         iconColor: "Black",
         input_edit: "",
-        flag: false,
-        hide: false,
-        sort: "alpha",
         line: "line-through",
         arrItem: [],
         todoLists: [],
-        customArr: [],
+        defaultarr: [],
         show_modalName: false,
         keyCheck: 0,
         show_delete: false,
@@ -404,22 +396,401 @@
         show_editList: false,
         show_deleteList: false
       },
-      methods:{
-        showModalList: function (){  // เปิดหน้าต่างเพิ่ม list
-          this.show_addList = !this.show_addList
-        },
-        addList: function(){ // เพิ่ม list
-          if(this.createList == ""){
+      methods: {
+        addTask: function () {
+          if (this.selectList == "--Select List--") {
+            alert("โปรดสร้าง list")
+            return
+          }
+          else if (this.newName == "") {
             alert("โปรดใส่ชื่อ")
           }
-          else{
+          else {
+            this.idCount++
+            this.arrItem.push({
+              id: this.idCount,
+              name: this.newName,
+              check: false,
+              listId: this.selectList,
+              dueDate: this.date,
+              flagStatus: this.flagStatus,
+              color: this.iconColor
+            })
+            this.newName = ""
+            this.date = ""
+            this.flagStatus = false
+            this.iconColor = "Black"
+            this.defaultarr = this.arrItem
+          }
+        },
+        edit(item) {
+          this.show_modalName = !this.show_modalName
+          this.editName = item
+          this.input_edit = item.name
+          this.edit_selectList = item.listId
+          this.dueDate = item.dueDate
+          this.edit_flagStatus = item.flagStatus
+          this.edit_iconColor = item.color
+        },
+        saveName() {
+          if (this.editName != "" && this.input_edit != "") {
+            for (var i of this.arrItem) {
+              if (i.name === this.editName.name) {
+                i.name = this.input_edit
+                i.listId = this.edit_selectList
+                i.dueDate = this.edit_date
+                i.flagStatus = this.edit_flagStatus
+                i.color = this.edit_iconColor
+              }
+            }
+            this.flagTask(this.edit_selectList)
+            this.keyCheck++
+            this.show_modalName = !this.show_modalName
+          }
+          else {
+            alert("โปรดใส่ชื่อ")
+          }
+        },
+        removeTask: function (item) {
+          this.show_delete = !this.show_delete
+          this.deleteName = item.name
+          this.deleteObj = item
+        },
+        confirmDelete: function () {
+          this.keyCheck++
+          let idx = this.arrItem.indexOf(this.deleteObj)
+          for (var i of this.customArr) {
+            if (this.arrItem[idx].id == i.id) {
+              this.arrItem.splice(idx, 1)
+            }
+          }
+          this.defaultarr = this.arrItem
+          this.show_delete = !this.show_delete
+        },
+        saveCheckbox: function (item) {
+          item.check = !item.check
+        },
+        showModalList: function () {
+          this.show_addList = !this.show_addList
+        },
+        addList: function () {
+          if (this.createList == "") {
+            alert("โปรดใส่ชื่อ")
+          }
+          else {
             this.todoLists.push({
-            id: this.idList++,
-            name: this.createList
+              id: this.idList++,
+              name: this.createList,
+              hide: false,
+              flag: false,
+              sort: "alpha"
             })
             this.createList = ""
             this.show_addList = !this.show_addList
           }
+        },
+        editList: function (list) {
+          this.show_editList = !this.show_editList
+          this.edit_listName = list.name
+          this.keep_idList = list.id
+        },
+        saveEditList: function () {
+          for (var i of this.todoLists) {
+            if (this.edit_listName == "") {
+              alert("โปรดใส่ชื่อ")
+              return
+            }
+            if (i.id == this.keep_idList) {
+              i.name = this.edit_listName
+              this.show_editList = !this.show_editList
+            }
+          }
+        },
+        modaldeleteList: function (list) {
+          this.show_deleteList = !this.show_deleteList
+          this.keep_deleteList = list
+        },
+        deleteList: function () {
+          this.arrItem = this.arrItem.filter(item => item.listId != this.keep_deleteList.id)
+          this.todoLists = this.todoLists.filter(item => item.id != this.keep_deleteList.id)
+          this.keyCheck++
+          this.show_deleteList = !this.show_deleteList
+          this.defaultarr = this.arrItem
+        },
+        test: function (id) {
+          this.hideFlag[id].hide = !this.hideFlag[id].hide
+          this.hideTask(id)
+        },
+        test2: function (id) {
+          this.hideFlag[id].flag = !this.hideFlag[id].flag
+          this.flagTask(id)
+        },
+        hideTask: function (id) {
+          this.arrItem = this.defaultarr
+          let keep = []
+          if (this.todoLists[id].hide && this.todoLists[id].flag == false) {
+            for (var i of this.arrItem) {
+              if (i.listId == this.todoLists[id].id && i.check == false) {
+                keep.push(i)
+              }
+            }
+          }
+          else if (this.todoLists[id].hide && this.todoLists[id].flag) {
+            for (var i of this.arrItem) {
+              if (i.flagStatus == true && i.listId == this.todoLists[id].id && i.check == false) {
+                keep.push(i)
+              }
+            }
+          }
+          else if (i.hide == false && i.flag) {
+            for (var j of this.arrItem) {
+              if (i.flagStatus == true && i.listId == this.todoLists[id].id) {
+                keep.push(j)
+              }
+            }
+          }
+          else {
+            for (var i of this.arrItem) {
+              if (i.listId == this.todoLists[id].id) {
+                keep.push(j)
+              }
+            }
+          }
+          this.keyCheck++
+          this.arrItem = keep
+        },
+        flagTask: function (id) {
+          this.arrItem = this.defaultarr
+          let keep = []
+          if (this.todoLists[id].flag && this.todoLists[id].hide == false) {
+            for (var i of this.arrItem) {
+              if (i.flagStatus == true && i.listId == this.todoLists[id].id) {
+                keep.push(j)
+              }
+            }
+          }
+          else if (this.todoLists[id].flag && this.todoLists[id].hide) {
+            for (var i of this.arrItem) {
+              if (j.id == k.id && k.flagStatus == true && k.listId == i.id) {
+                keep.push(j)
+              }
+            }
+          }
+          else if (i.flag == false && i.hide) {
+            for (var j of this.arrItem) {
+              if (j.listId == i.id && j.check == false) {
+                keep.push(j)
+              }
+            }
+          }
+          else {
+            for (var j of this.arrItem) {
+              if (j.listId == i.id) {
+                keep.push(j)
+              }
+            }
+          }
+          this.keyCheck++
+          this.arrItem = keep
+        },
+        sortalpha: function (id) {
+          let keep = []
+          this.hideFlag[id].sort = "alpha"
+          this.arrItem.sort(function (a, b) {
+            if (a.listId < b.listId) {
+              return -1
+            }
+            if (a.listId > b.listId) {
+              return 1
+            }
+            return 0
+          })
+          for (var i of this.arrItem) {
+            if (i.listId == id) {
+              keep.push(i)
+            }
+          }
+          keep.sort(function (a, b) {
+            if (a.name < b.name) {
+              return -1
+            }
+            if (a.name > b.name) {
+              return 1
+            }
+            return 0
+          })
+          for (var i of this.arrItem) {
+            if (i.listId != id) {
+              keep.push(i)
+            }
+          }
+          this.keyCheck++
+          this.arrItem = keep
+        },
+        sortincomplete: function (id) {
+          let keep = []
+          this.hideFlag[id].sort = "incompletefirst"
+          this.arrItem.sort(function (a, b) {
+            if (a.listId < b.listId) {
+              return -1
+            }
+            if (a.listId > b.listId) {
+              return 1
+            }
+            return 0
+          })
+          for (var i of this.arrItem) {
+            if (i.listId == id) {
+              keep.push(i)
+            }
+          }
+          keep.sort(function (a, b) {
+            if (a.check < b.check) {
+              return -1
+            }
+            if (a.check > b.check) {
+              return 1
+            }
+            return 0
+          })
+          for (var i of this.arrItem) {
+            if (i.listId != id) {
+              keep.push(i)
+            }
+          }
+          this.keyCheck++
+          this.arrItem = keep
+        },
+        sortFlag: function (id) {
+          let keep = []
+          let keepflag = []
+          let keepflag2 = []
+          this.hideFlag[id].sort = "flagfirst"
+          this.arrItem.sort(function (a, b) {
+            if (a.listId < b.listId) {
+              return -1
+            }
+            if (a.listId > b.listId) {
+              return 1
+            }
+            return 0
+          })
+          for (var i of this.customArr) {
+            if (i.flagStatus && i.listId == id) {
+              keepflag.push(i.id)
+            }
+          }
+          for (var i of this.customArr) {
+            if (i.flagStatus == false || i.listId != id) {
+              keepflag2.push(i.id)
+            }
+          }
+          for (var i of this.arrItem) {
+            for (var j of keepflag) {
+              if (i.id == j) {
+                keep.push(i)
+              }
+            }
+          }
+          for (var i of this.arrItem) {
+            for (var j of keepflag2) {
+              if (i.id == j) {
+                keep.push(i)
+              }
+            }
+          }
+          this.keyCheck++
+          this.arrItem = keep
+        },
+        sortDate: function (id) {
+          console.log("use4")
+          this.hideFlag[id].sort = "date"
+          let keep = []
+          let keepdate = []
+          for (var i of this.customArr) {
+            if (i.listId == id && i.dueDate != "") {
+              keepdate.push(i)
+            }
+          }
+          keepdate.sort(function (a, b) {
+            if (a.dueDate < b.dueDate) {
+              return -1
+            }
+            if (a.dueDate > b.dueDate) {
+              return 1
+            }
+            return 0
+          })
+          for (var i of keepdate) {
+            for (var j of this.arrItem) {
+              if (i.id == j.id) {
+                keep.push(j)
+              }
+            }
+          }
+          for (var i of this.arrItem) {
+            let count = 0
+            for (var j of keepdate) {
+              if (i.id == j.id) {
+                count++
+              }
+            }
+            if (count == 0) {
+              keep.push(i)
+            }
+          }
+          for (var i of keep) {
+            console.log(i.id)
+          }
+          this.keyCheck++
+          this.arrItem = keep
+        }
+      },
+      computed: {
+        numComplete() {
+          let ans = 0
+          for (let i = 0; i < this.defaultarr.length; i++) {
+            if (this.defaultarr[i].check) {
+              ans++
+            }
+          }
+          return ans
+        },
+        numIncomplete() {
+          let ans = 0
+          for (let i = 0; i < this.defaultarr.length; i++) {
+            if (this.defaultarr[i].check == false) {
+              ans++
+            }
+          }
+          return ans
+        },
+        numFlag() {
+          let ans = 0
+          for (var i of this.customArr) {
+            if (i.flagStatus) {
+              ans++
+            }
+          }
+          return ans
+        },
+        arr() {
+          this.keyCheck++
+          for (var i of this.hideFlag) {
+            if (i.sort == "alpha") {
+              this.sortalpha(i.id)
+            }
+            else if (i.sort == "incompletefirst") {
+              this.sortincomplete(i.id)
+            }
+            else if (i.sort == "flagfirst") {
+              this.sortFlag(i.id)
+            }
+            else if (i.sort == "date") {
+              this.sortDate(i.id)
+            }
+          }
+          return this.arrItem
         }
       }
     });

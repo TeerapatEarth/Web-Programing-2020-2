@@ -408,11 +408,12 @@
       methods: {
         addTask: function () {
           if (this.selectList == "--Select List--") {
-            alert("โปรดสร้าง list")
-            return
+            alert("โปรดเลือก list")
+            return 0
           }
           if (this.newName == "") {
             alert("โปรดใส่ชื่อ")
+            return 0
           }
           else {
             this.idCount++
@@ -553,6 +554,9 @@
           this.keyCheck++
           this.show_deleteList = !this.show_deleteList
           this.defaultarr = this.arrItem
+          if(this.todoLists == []){
+            this.selectList = "--Select List--"
+          }
         },
         test: function(id){
           this.hideFlag[id].hide = !this.hideFlag[id].hide
@@ -619,7 +623,7 @@
             else if(i.flag && i.hide){
               for (var j of this.arrItem) {
                 for (var k of this.customArr) {
-                  if (j.id == k.id && k.flagStatus == true && k.listId == i.id) {
+                  if (j.id == k.id && k.flagStatus == true && k.listId == i.id && j.check == false) {
                     keep.push(j)
                   }
                 }
