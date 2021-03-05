@@ -137,7 +137,7 @@
                   <template v-for="sty in customArr">
                     <template v-if="sty.id == item.id">
                       <template v-if="sty.dueDate != ''">
-                        ( Due date {{sty.dueDate}} )
+                        ( Due by {{sty.dueDate}} )
                       </template>
                       <template v-if="sty.flagStatus == true">
                         <i class="fas fa-flag"></i>
@@ -554,7 +554,7 @@
           this.keyCheck++
           this.show_deleteList = !this.show_deleteList
           this.defaultarr = this.arrItem
-          if(this.todoLists == []){
+          if(this.todoLists.length == 0){
             this.selectList = "--Select List--"
           }
         },
@@ -668,7 +668,7 @@
             if (a.name < b.name) {
               return -1
             }
-            if (a.name > b.name) {
+            if (a.name > b.name){
               return 1
             }
             return 0
