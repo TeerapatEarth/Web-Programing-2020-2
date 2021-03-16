@@ -1,0 +1,158 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Programming - Week 7 : Exercise 04</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" />
+</head>
+
+<body>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../exercise-01/index.html">
+        <b>Web Programming | Week 7</b>
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="../exercise-01/index.html"> ข้อที่ 1 Event Loop</a>
+        <a class="navbar-item" href="../exercise-02/index.html"> ข้อที่ 2 Callback</a>
+        <a class="navbar-item" href="../exercise-03/index.html"> ข้อที่ 3 Promise</a>
+        <a class="navbar-item is-active has-background-warning-light" href="../exercise-04/index.html"> ข้อที่ 4 Async &
+          Await</a>
+      </div>
+    </div>
+    </div>
+  </nav>
+  <div class="container my-6" id="app">
+    <h3 class="title is-3 my-3"><b>EXERCISE 4 : Async & Await</b></h3>
+    <!-- 4.1 -->
+    <div class="box">
+      <p>
+        <b>4.1</b> ให้นักศึกษาทำระบบการดูรายชื่อ (ให้นำข้อ 3 มาประยุกต์ต่อ) โดยมีขั้นตอนดังนี้
+      </p>
+      <br>
+      <dl>
+        <li>ทำการยืนยันว่าเป็นผู้มีสิทธิ์เข้าถึงด้วยการสร้างฟังก์ชัน <code>checkAuth()</code> โดยให้กรอกรหัสผ่าน
+          <b>(กำหนดรหัสผ่านเป็น : bitcoin)</b> เพื่อยืนยันตัวตน​ (กำหนดให้มีการดีเลย์ 3 วินาที)
+        </li>
+        <li>กรณีที่<b>ผ่าน</b>ให้เข้าถึง <code>fetchUserData()</code> เพื่อตรวจสอบการดึงข้อมูลมาแสดงผล​
+          และแสดงผลชื่อและอีเมล</li>
+        <li>กรณีที่<b>ไม่ผ่าน</b> ให้แสดงผลว่า "รหัสผ่านไม่ถูกต้อง กรุณาลองอีกครั้ง" หรือ "ไม่สามารถดึงข้อมูลได้" ตาม
+          Error ที่เกิดขึ้น</li>
+      </dl>
+      <br>
+      <p class="has-text-danger">หมายเหตุ 1 : ให้ใช้ API นี้ในการดึงข้อมูลมาแสดงผล
+        <code>https://jsonplaceholder.typicode.com/users</code>
+      </p>
+      <p class="has-text-danger">หมายเหตุ 2 : ในข้อนี้ให้ทำการประยุกต์ผลลัพธ์จากข้อ 3.1 โดยให้ใช้ฟังก์ชัน Async/Await
+        ในการตรวจสอบ <code>checkAuth</code> และ <code>fetchUserData</code></p>
+      <p class="has-text-danger">หมายเหตุ 3 : ให้นักศึกษาแก้ไขฟังก์ชัน <code>getAPI</code> โดยให้ปรับเป็นรูปแบบ Promise
+        แทน</p>
+      <br>
+      <div class="field is-grouped" v-show="inputbox == true">
+        <p class="control is-expanded">
+          <input class="input" type="text" placeholder="ระบุรหัสผ่านที่ใช้ในการเข้าถึง" v-model="password">
+        </p>
+        <p class="control">
+          <a class="button is-info" @click="fetchUserData()">
+            ยืนยันรหัสผ่าน
+          </a>
+        </p>
+      </div>
+      <div class="columns" v-show="check == true">
+        <div class="column is-12  has-background-primary has-text-centered">
+          <p class="is-size-3">{{text}}</p>
+        </div>
+      </div>
+      <div class="columns is-multiline is-active" v-show="data == true">
+        <div class="column is-3" v-for="info in arrInfo">
+          <div class="card">
+            <div class="card-content">
+              <div class="content">
+                <b>{{info.name}}</b>
+                <br>
+                {{info.email}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data: {
+        inputbox: true,
+        check: false,
+        password: "",
+        text: "Checking Auth.....",
+        data: false,
+        arrInfo: []
+      },
+      methods: {
+        async checkAuth(pass) {
+          if (pass == "bitcoin") {
+            return Promise.resolve(1)
+          }
+          else {
+            return Promise.reject(0)
+          }
+        },
+        async fetchUserData() {
+          this.inputbox = false
+          this.check = true
+          setTimeout(async () => {
+            try {
+              let pro = await this.checkAuth(this.password)
+              this.arrInfo = await this.getAPI('https://jsonplaceholder.typicode.com/users')
+              this.text = 'Fetching Data......'
+              setTimeout(() =>{
+                this.data = true
+                this.check = false
+              }, 2000)
+            }
+            catch (err) {
+              this.text = 'รหัสไม่ถูกต้อง'
+              setTimeout(() =>{
+                this.check = false
+                this.inputbox = true
+                this.text = 'Checking Auth.....'
+              }, 2000)
+            }
+          }, 3000)
+        },
+        getAPI(url, success, error) {
+          return new Promise(function (resolve, reject) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+              if (this.readyState == 4 && this.status == 200) {
+                const res = JSON.parse(this.response);
+                resolve(res);
+              } else if (this.readyState == 4) {
+                const res = JSON.parse(this.response);
+                reject(res);
+              }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader("Accept", "application/json");
+            xhttp.send();
+          })
+        },
+      }
+    });
+  </script>
+</body>
+
+</html>

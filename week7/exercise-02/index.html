@@ -1,0 +1,220 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Programming - Week 7 Ex 1</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" />
+</head>
+
+<body>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../exercise-01/index.html">
+        <b>Web Programming | Week 7 : Exercise 02</b>
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="../exercise-01/index.html"> ข้อที่ 1 Event Loop</a>
+        <a class="navbar-item is-active has-background-warning-light" href="../exercise-02/index.html"> ข้อที่ 2
+          Callback</a>
+        <a class="navbar-item" href="../exercise-03/index.html"> ข้อที่ 3 Promise</a>
+        <a class="navbar-item" href="../exercise-04/index.html"> ข้อที่ 4 Async & Await</a>
+
+      </div>
+    </div>
+    </div>
+  </nav>
+  <div class="container my-6" id="app">
+    <h3 class="title is-3 my-3"><b>EXERCISE 2 : Callback Function</b></h3>
+    <!-- 2.1 -->
+    <div class="box">
+      <p>
+        <b>2.1</b> ให้นักศึกษาสร้างนาฬิกาจับเวลา โดยแก้ไข <code>Method stopTime()</code>
+        ในการนับถอยหลัง​​ โดยแสดงเวลาในรูปแบบนาที และวินาที
+      </p>
+      <br>
+      <p class="has-text-danger">หมายเหตุ 1 : ให้ตั้งเวลา default เป็น 119 วินาที</p>
+      <p class="has-text-danger">หมายเหตุ 2 : หากมีการกำหนดจำนวนวินาทีในช่อง Input มากกว่า 0 เมื่อกด Run
+        ให้แสดงผลการนับถอยหลังตามที่กำหนด</p>
+      <p class="has-text-danger">หมายเหตุ 3 : ให้เก็บข้อมูลนาทีและวินาทีใน data() เท่านั้น ห้ามใช้ document.</p>
+      <p class="has-text-danger">หมายเหตุ 4 : กรณีหมดเวลาและตอนเริ่มต้น ต้องแสดงผลเป็น 00:00 เท่านั้น</p>
+      <br /><br>
+      <div class="columns">
+        <div class="column is-one-fifth">
+          <input class="input" type="number" placeholder="นับถอยหลังกี่วินาที ?" v-model="time">
+        </div>
+        <div class="column is-one-fifth">
+          <button class="button is-dark" @click="stopTime(time)">
+            >: Run
+          </button>
+        </div>
+        <div class="column has-background-link-light has-text-centered">
+          <h2 class="title is-2">
+            <!-- แก้ไขส่วนนี้เพื่อนำข้อมูลมาแสดงผล -->
+            <span>{{min}}</span>
+            <span>:</span>
+            <span>{{sec}}</span>
+          </h2>
+        </div>
+      </div>
+    </div>
+    <!-- 2.2 -->
+    <div class="box">
+      <p>
+        <b>2.2</b> ให้นักศึกษาแก้ <code>Method getDogDemo()</code>
+        <br>เมื่อกดปุ่ม Run ให้นับเวลาถอยหลัง 10 วินาที จากนั้นแสดงรูปที่สุ่มได้จาก API
+        <code>https://dog.ceo/api/breeds/image/random</code>
+      </p>
+      <br>
+      <p class="has-text-danger">หมายเหตุ: เรียกใช้ API ด้วยฟังก์ชัน <code>getAPI()</code> เท่านั้น</p>
+      <br /><br>
+      <div class="columns">
+        <div class="column is-two-fifths">
+          <button class="button is-dark" @click="getDogDemo()">
+            >: Run
+          </button>
+        </div>
+        <div class="column has-background-link-light	has-text-centered">
+          <!-- แก้ไขส่วนนี้เพื่อนำข้อมูลมาแสดงผล -->
+          <span class="count-down">{{countdown}}</span>
+          <img :src="srcimg" alt="">
+        </div>
+      </div>
+    </div>
+    <!-- 2.3 -->
+    <div class="box">
+      <p>
+        <b>2.3</b> ให้แก้ไข <code>Method getMedium()</code>
+        <br>เมื่อกดปุ่ม Run ให้เรียกใช้ API <code>https://v1.nocodeapi.com/jacktnp/medium/xvYwlRhrjtVLsWUn</code>
+        <br>และแสดงผล 4 บทความแรกที่ได้จาก API ด้วยแท็ก &lt;dl&gt; และ &lt;li&gt;
+        <br>โดยให้แต่ละบทความปรากฎขึ้นบนจอโดยมีดีเลย์ห่างกัน 2 - 1 - 3 - 5 วินาที ตามลำดับ
+      </p>
+      <br>
+      <p class="has-text-danger">หมายเหตุ: เรียกใช้ API ด้วยฟังก์ชัน <code>getAPI()</code> เท่านั้น</p>
+      <br /><br>
+      <div class="columns">
+        <div class="column is-two-fifths">
+          <button class="button is-dark" @click="getMedium()">
+            >: Run
+          </button>
+        </div>
+        <div class="column has-background-link-light">
+          <!-- แก้ไขส่วนนี้เพื่อนำข้อมูลมาแสดงผล -->
+          <dl>
+            <li>{{delay2}}</li>
+            <li>{{delay1}}</li>
+            <li>{{delay3}}</li>
+            <li>{{delay5}}</li>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ฟังก์ชันเรียก API
+    function getAPI(url, success, error) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const res = JSON.parse(this.response);
+          success(res);
+        } else if (this.readyState == 4) {
+          const res = JSON.parse(this.response);
+          error(res);
+        }
+      };
+      xhttp.open("GET", url, true);
+      xhttp.setRequestHeader("Accept", "application/json");
+      xhttp.send();
+    }
+
+    var app = new Vue({
+      el: "#app",
+      data: {
+        time: 119,
+        min: "00",
+        sec: "00",
+        countdown: 10,
+        srcimg: "",
+        delay2: "",
+        delay1: "",
+        delay3: "",
+        delay5: ""
+      },
+      methods: {
+        stopTime(setTime) {
+          var myfun = setInterval(() => {
+            this.time--
+            this.min = Math.floor(this.time / 60)
+            this.sec = Math.floor(this.time % 60)
+            if (this.min < 10) {
+              this.min = "0" + this.min
+            }
+            if (this.sec < 10) {
+              this.sec = "0" + this.sec
+            }
+            if (this.time == 0) {
+              clearInterval(myfun)
+            }
+          }, 1000)
+        },
+        getDogDemo(url) {
+          let img = ""
+          getAPI('https://dog.ceo/api/breeds/image/random', function (res) { img = res.message })
+          var myfun = setInterval(() => {
+            this.countdown--
+            if (this.countdown == 0) {
+              this.srcimg = img
+              this.countdown = ""
+              clearInterval(myfun)
+            }
+          }, 1000)
+        },
+        getMedium(url) {
+          let title1 = ""
+          let title2 = ""
+          let title3 = ""
+          let title4 = ""
+          function setTitle(titleAPI, index, milli) {
+            return new Promise(
+              function (resolve, reject) {
+                setTimeout(() => {
+                  getAPI('https://v1.nocodeapi.com/jacktnp/medium/xvYwlRhrjtVLsWUn', function (res) {
+                    titleAPI = res[index].title
+                    resolve(titleAPI)
+                  })
+                }, milli)
+              }
+            )
+          }
+          setTitle(title1, 0, 2000).then((result) => {
+            this.delay2 = result
+            return setTitle(title2, 1, 1000)
+          }).then((result) => {
+            this.delay1 = result
+            return setTitle(title3, 2, 3000)
+          }).then((result) => {
+            this.delay3 = result
+            return setTitle(title4, 3, 5000)
+          }).then((result) =>{
+            this.delay5 = result
+          })
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
