@@ -1,0 +1,19 @@
+const express = require("express");
+const pool = require("../config");
+
+router = express.Router();
+
+router.get("/", async function (req, res, next) {
+  try {
+    const [rows, fields] = await pool.query(
+      `SELECT a.*, b.file_path FROM blogs AS a LEFT JOIN 
+      (SELECT * FROM images) AS b ON a.id = b.blog_id;`
+    );
+    console.log(rows)
+    return res.render("index", { blogs: rows });
+  } catch (err) {
+    return next(err)
+  }
+});
+
+exports.router = router;
