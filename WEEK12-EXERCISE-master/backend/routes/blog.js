@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const pool = require("../config");
+const Joi = require('joi')
 const fs = require("fs");
 
 router = express.Router();
@@ -20,6 +21,44 @@ var storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
+
+function validatestatus(value){
+  if(value != "status_private"){
+    if(value != "status_public"){
+      throw new Joi.ValidationError("Error status")
+    }
+    return value
+  }
+  return value
+}
+
+function nullenddate(value){
+  throw new Joi.ValidationError('error Missing date')
+}
+
+function checkdate(value){
+  throw new Joi.ValidationError('error Wrong date')
+}
+
+function check(start, end){
+  let result = start.localeCompare(end)
+  if(result == 1){
+    return false
+  }
+  else{
+    return true
+  }
+}
+
+const schemaBlog = Joi.object({
+  title: Joi.string().required().pattern(/^[a-zA-Z]{10,25}$/),
+  content: Joi.string().required().min(50),
+  status: Joi.string().required().custom(validatestatus),
+  pinned: Joi.number().required(),
+  start_date: Joi.alternatives().conditional('end_date', {is: Joi.exist(), then: Joi.date().required()}),
+  end_date: Joi.date().greater(Joi.ref('start_date')).when('start_date', {is:Joi.exist(), then:Joi.required()}),
+  reference: Joi.string().uri().allow(''),
+})
 
 // Like blog that id = blogId
 router.put("/blogs/addlike/:blogId", async function (req, res, next) {
@@ -51,7 +90,6 @@ router.put("/blogs/addlike/:blogId", async function (req, res, next) {
     conn.release();
   }
 });
-
 router.post(
   "/blogs",
   upload.array("myImage", 5),
@@ -60,14 +98,24 @@ router.post(
       const file = req.files;
       let pathArray = [];
 
-      if (!file) {
-        return res.status(400).json({ message: "Please upload a file" });
+      // if (!file) {
+      //   return res.status(400).json({ message: "Please upload a file" });
+      // }
+
+      try {
+        await schemaBlog.validateAsync(req.body, { abortEarly: false })
+      } catch (err) {
+        console.log(err)
+        return res.status(400).json(err)
       }
 
       const title = req.body.title;
       const content = req.body.content;
       const status = req.body.status;
       const pinned = req.body.pinned;
+      const start_date = req.body.start_date;
+      const end_date = req.body.end_date;
+      const reference = req.body.reference;
 
       const conn = await pool.getConnection();
       // Begin transaction
@@ -75,8 +123,8 @@ router.post(
 
       try {
         let results = await conn.query(
-          "INSERT INTO blogs(title, content, status, pinned, `like`,create_date) VALUES(?, ?, ?, ?, 0,CURRENT_TIMESTAMP);",
-          [title, content, status, pinned]
+          "INSERT INTO blogs(title, content, status, pinned, `like`,create_date, start_date, end_date, reference) VALUES(?, ?, ?, ?, 0,CURRENT_TIMESTAMP, ?, ?, ?);",
+          [title, content, status, pinned, start_date, end_date, reference]
         );
         const blogId = results[0].insertId;
 
@@ -85,14 +133,15 @@ router.post(
           pathArray.push(path);
         });
 
-        await conn.query(
-          "INSERT INTO images(blog_id, file_path, main) VALUES ?;",
-          [pathArray]
-        );
+        // await conn.query(
+        //   "INSERT INTO images(blog_id, file_path, main) VALUES ?;",
+        //   [pathArray]
+        // );
 
         await conn.commit();
         res.send("success!");
       } catch (err) {
+        console.log("eeee")
         await conn.rollback();
         return res.status(400).json(err);
       } finally {

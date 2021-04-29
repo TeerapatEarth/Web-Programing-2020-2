@@ -24,7 +24,11 @@
       />
 
       <div v-if="images" class="columns is-multiline">
-        <div v-for="(image, index) in images" :key="image.id" class="column is-one-quarter">
+        <div
+          v-for="(image, index) in images"
+          :key="image.id"
+          class="column is-one-quarter"
+        >
           <div class="card">
             <div class="card-image">
               <figure class="image is-4by3">
@@ -32,7 +36,11 @@
               </figure>
             </div>
             <footer class="card-footer">
-              <a @click="deleteSelectImage(index)" class="card-footer-item has-text-danger">Delete</a>
+              <a
+                @click="deleteSelectImage(index)"
+                class="card-footer-item has-text-danger"
+                >Delete</a
+              >
             </footer>
           </div>
         </div>
@@ -41,31 +49,77 @@
       <div class="field mt-5">
         <label class="label">Title</label>
         <div class="control">
-          <input v-model="titleBlog" class="input" type="text" placeholder="Text input" />
+          <input
+            v-model="$v.titleBlog.$model"
+            class="input"
+            :class="{ 'is-danger': $v.titleBlog.$error }"
+            type="text"
+            placeholder="Text input"
+          />
         </div>
+        <template v-if="$v.titleBlog.$error">
+          <p class="help is-danger" v-if="!$v.titleBlog.required">
+            This field is required
+          </p>
+          <p class="help is-danger" v-if="!$v.titleBlog.length">
+            10 - 25 only and not number
+          </p>
+        </template>
       </div>
 
       <div class="field">
         <label class="label">Content</label>
         <div class="control">
-          <textarea v-model="contentBlog" class="textarea" placeholder="Textarea"></textarea>
+          <textarea
+            v-model="$v.contentBlog.$model"
+            :class="{ 'is-danger': $v.contentBlog.$error }"
+            class="textarea"
+            placeholder="Textarea"
+          ></textarea>
         </div>
+        <template v-if="$v.contentBlog.$error">
+          <p class="help is-danger" v-if="!$v.contentBlog.required">
+            This field is required
+          </p>
+          <p class="help is-danger" v-if="!$v.contentBlog.length">
+            more than 50
+          </p>
+        </template>
       </div>
-      
+
       <div class="field">
         <label class="label">Reference</label>
         <div class="control">
-          <input class="input" type="url" v-model="reference" placeholder="e.g. https://www.google.com">
+          <input
+            class="input"
+            type="url"
+            v-model="$v.reference.$model"
+            placeholder="e.g. https://www.google.com"
+            :class="{ 'is-danger': $v.reference.$error }"
+          />
         </div>
+        <template v-if="$v.reference.$error">
+          <p class="help is-danger" v-if="!$v.reference.url">URL only</p>
+        </template>
       </div>
 
       <div class="control mb-3">
         <label class="radio">
-          <input v-model="statusBlog" type="radio" name="answer" value="status_private" />
+          <input
+            v-model="statusBlog"
+            type="radio"
+            name="answer"
+            value="status_private"
+          />
           Private
         </label>
         <label class="radio">
-          <input v-model="statusBlog" type="radio" name="answer" value="status_public" />
+          <input
+            v-model="statusBlog"
+            type="radio"
+            name="answer"
+            value="status_public"
+          />
           Public
         </label>
       </div>
@@ -79,14 +133,14 @@
         </div>
       </div>
 
-      <hr>
+      <hr />
 
       <div class="columns">
         <div class="column">
           <div class="field">
             <label class="label">วันที่โพสต์</label>
             <div class="control">
-              <input class="input" type="date" v-model="start_date">
+              <input class="input" type="date" v-model="$v.start_date.$model" />
             </div>
           </div>
         </div>
@@ -94,8 +148,14 @@
           <div class="field">
             <label class="label">วันสิ้นสุดโพสต์</label>
             <div class="control">
-              <input class="input" type="date" v-model="end_date">
+              <input class="input" type="date" v-model="$v.end_date.$model" />
             </div>
+            <template v-if="$v.start_date.$error">
+              <p class="help is-danger" v-if="!$v.start_date.daterequired">Please insert end date</p>
+            </template>
+            <template v-if="$v.end_date.$error">
+              <p class="help is-danger" v-if="!$v.end_date.end">Wrong date</p>
+            </template>
           </div>
         </div>
       </div>
@@ -105,7 +165,9 @@
           <button @click="submitBlog" class="button is-link">Submit</button>
         </div>
         <div class="control">
-          <button @click="$router.go(-1)" class="button is-link is-light">Cancel</button>
+          <button @click="$router.go(-1)" class="button is-link is-light">
+            Cancel
+          </button>
         </div>
       </div>
     </section>
@@ -114,7 +176,27 @@
 
 <script>
 import axios from "axios";
-
+import { required, minLength, url } from "vuelidate/lib/validators";
+function title(value) {
+  return !!value.match(/^[a-zA-z]{10,25}$/);
+}
+function startdate(value){
+  if (this.end_date == "" && value != ""){
+    return false
+  }
+  return true
+}
+function enddate(value){
+  let start = this.start_date
+  let end = value
+  let result = start.localeCompare(end)
+  if(result == 1){
+    return false
+  }
+  else{
+    return true
+  }
+}
 export default {
   data() {
     return {
@@ -127,8 +209,27 @@ export default {
       statusBlog: "status_public",
       reference: "",
       start_date: "",
-      end_date: ""
+      end_date: "",
     };
+  },
+  validations: {
+    titleBlog: {
+      required: required,
+      length: title,
+    },
+    contentBlog: {
+      required: required,
+      length: minLength(50),
+    },
+    reference: {
+      url: url,
+    },
+    start_date:{
+      daterequried : startdate
+    },
+    end_date:{
+      end: enddate
+    }
   },
   methods: {
     selectImages(event) {
@@ -148,13 +249,17 @@ export default {
       formData.append("title", this.titleBlog);
       formData.append("content", this.contentBlog);
       formData.append("pinned", this.pinnedBlog ? 1 : 0);
-      // formData.append("reference", this.reference);
-      // formData.append("start_date", this.start_date);
-      // formData.append("end_date", this.end_date);
+      formData.append("reference", this.reference);
+      if(this.start_date != ''){
+        formData.append("start_date", this.start_date);
+      }
+      if(this.end_date != ''){
+        formData.append("end_date", this.end_date);
+      }
       formData.append("status", this.statusBlog);
-      this.images.forEach((image) => {
-        formData.append("myImage", image);
-      });
+      // this.images.forEach((image) => {
+      //   formData.append("myImage", image);
+      // });
 
       // Note ***************
       // ตอนเรายิง Postmant จะใช้ fromData
@@ -172,7 +277,7 @@ export default {
 
       axios
         .post("http://localhost:3000/blogs", formData)
-        .then((res) => this.$router.push({name: 'home'}))
+        .then((res) => this.$router.push({ name: "home" }))
         .catch((e) => console.log(e.response.data));
     },
   },
